@@ -4,6 +4,6 @@ cd ../../
 pwd
 git add -A
 git commit -m "small changes"
-git push hithub master
+git push github master
 git push heroku master
 
