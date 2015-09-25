@@ -1,0 +1,24 @@
+{
+  "name": "mongo-explorer",
+  "version": "1.0.0",
+  "description": "MongoDB free online data explorer.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "devDependencies": {
+   
+  },
+  "engines": {
+    "node": "0.12.2",
+    "npm": "2.7.4"
+  },
+  "dependencies": {
+    "express": "~4.9.x",
+    "mongodb" : "2.0.42",
+    "should" :  "7.1.0",
+    "Q": "1.4.1"
+    
+  },
+  "license": "MIT"
+}
