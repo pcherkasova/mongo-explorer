@@ -15,7 +15,8 @@ $(document).ready(function () {
 	
 	$("#stop").click(function(){currentRunRequest.abort();});
 	
-	refreshCollections();		
+	refreshCollections();	
+	
 });
 
 function updateExample() {
@@ -167,3 +168,4 @@ function showStatus(status, details) {
 	}
 	
 }
+

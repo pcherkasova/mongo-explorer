@@ -9,9 +9,9 @@ var should = require('should');
 exports.runQueryHTML = function (req, res, next) {
     var input = req.query;
     var output = { err: null, res: null };
-    console.log("runQueryHTML: " + JSON.stringify(input));
+    console.log("runQueryHTML");
     
-    return exports.runQuery(input.conn, input.coll, input.operation, input.q, structures.ROW_LIMIT
+    return runQuery(input.conn, input.coll, input.operation, input.q, structures.ROW_LIMIT
     ).then(function (arr) {
         output.res = arr;   
     }).catch(function (err) {
@@ -33,7 +33,7 @@ exports.runQueryHTML = function (req, res, next) {
 }
 
 // returns promise with array
-exports.runQuery = function (connection, collName, operation, query, rowLimit) {
+var runQuery = function (connection, collName, operation, query, rowLimit) {
     should(connection).instanceof(String);
     should(collName).instanceof(String);
     should(operation).instanceof(String);
@@ -74,7 +74,7 @@ exports.runQuery = function (connection, collName, operation, query, rowLimit) {
 exports.getCollectionsHTML = function (req, res, next) {
     var input = req.query;
     var output = { err: null, res: null };
-    console.log("getCollections: " + JSON.stringify(input));
+    console.log("getCollections");
     var db;
     var colls;
     
