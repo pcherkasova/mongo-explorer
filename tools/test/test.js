@@ -1,5 +1,5 @@
 var should = require("should"); // https://github.com/shouldjs/should.js
-var controller = require("./../../app/controllers/explorer.server.controller.js");
+var controller = require("./../../app/controllers/mongodb.server.controller.js");
 var Q = require("Q");
 var structures = require("./../../public/js/structures.js");
 
