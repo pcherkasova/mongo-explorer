@@ -8,9 +8,12 @@ User inrterface is design to be self-descriptive. If it is not, please, create a
 
 #How to Host
 1. Install nodejs and npm
-2. Run commands
+2. Run commands:
+
   npm install
+  
   bower install
+  
   node server.js
 
 
