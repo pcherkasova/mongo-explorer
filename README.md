@@ -1,5 +1,5 @@
 # mongo-explorer
-MongoDB Online Data Explorer
+MongoDB online data explorer. Delivers data in REST, CSV and HTML-table formats. 
 
 The explorer is hosted here: www.mongo-explorer.com.
 
