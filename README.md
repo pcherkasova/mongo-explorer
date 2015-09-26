@@ -3,7 +3,7 @@ MongoDB Online Data Explorer
 
 The explorer is hosted here: www.mongo-explorer.com.
 
-User inrterface is design to be self-descriptive. If it is not, please, create an [issue](https://github.com/pcherkasova/mongo-explorer/issues).
+The user inrterface is designed to be self-descriptive. If it is not, please, create an [issue](https://github.com/pcherkasova/mongo-explorer/issues).
 
 
 #How to Host
