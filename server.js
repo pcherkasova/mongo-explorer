@@ -1,4 +1,5 @@
 var forceSsl = function (req, res, next) {
+    // console.log(JSON.stringify(req.path));
     if (req.headers['x-forwarded-proto'] !== 'https') {
         return res.redirect(['https://', req.get('Host'), req.url].join(''));
     }
@@ -12,10 +13,11 @@ var app = express();
 var port = process.env.PORT || 8080;
 var env = process.env.NODE_ENV || 'development';
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public'));
+
 
 if (env === 'production') 
     app.use(forceSsl);
+app.use(express.static(__dirname + '/public'));
 
 require('./app/server.routes.js')(app); 
 
