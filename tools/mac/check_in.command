@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "fixed tests"
+git commit -m "force ssl"
 
 git push github master
 git push heroku master
