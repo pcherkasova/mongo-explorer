@@ -21,6 +21,9 @@ app.use(express.static(__dirname + '/public'));
 
 require('./app/server.routes.js')(app); 
 
+console.log("telemetry: " + process.env.APP_TELEMETRY_DB);
+console.log("data: " + process.env.APP_DATA_DB);
+
 app.listen(port, function() {
 	console.log('The app is running on http://localhost:' + port);
 });

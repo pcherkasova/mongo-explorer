@@ -3,8 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "force ssl"
-
+git commit -m "configure telemetry"
 git push github master
-git push heroku master
+
 
