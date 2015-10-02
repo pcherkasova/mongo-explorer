@@ -158,10 +158,15 @@ var STATUS = {
 }
 
 function showStatus(status, details) {
-	//debugger;
+	
+	if (status != STATUS.NONE)
+		$('html, body').animate({scrollTop: $("#result").offset().top}, 1000);
+		
 	
 	status == STATUS.PROGRESS ? $("#progress").show() : $("#progress").hide();
 	status == STATUS.ERROR ? $("#result").addClass("w3-text-red") : $("#result").removeClass("w3-text-red");
+	
+	
 	
 	switch (status) {
 		case STATUS.NONE: $("#result").html(""); break;
