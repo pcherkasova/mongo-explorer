@@ -64,7 +64,7 @@ function logError() {
 }
 
 function logTrace() {
-	return logging.logTrace(session, "name", "datails"
+	return logging.logTrace(session, "name", "details"
 		).then(function () {
 			return db_operations.find(
 				CONN_STRING,
@@ -76,7 +76,7 @@ function logTrace() {
 			should(arr[0]).have.property('session');
 			should(arr[0].session.id).be.equal(session.id );
 			should(arr[0].name).be.equal("name");
-			should(arr[0].datails).be.equal("datails");
+			should(arr[0].details).be.equal("details");
 			console.log("---- test passed: logging.logTrace ---------------------------");
 		});
 }
