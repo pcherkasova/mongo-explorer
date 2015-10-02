@@ -2,7 +2,7 @@
 
 var test_explorer = require("./test.explorer.js"); 
 var test_logging = require("./test.logging.js"); 
-var Q = require("Q");
+var Q = require("q");
 
 var tests = [];
 tests = tests.concat(test_explorer.tests);

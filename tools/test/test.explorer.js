@@ -2,7 +2,7 @@
 
 var should = require("should"); // https://github.com/shouldjs/should.js
 var controller = require("./../../app/controllers/explorer.controller.js");
-var Q = require("Q");
+var Q = require("q");
 var model = require("./../../public/js/model.js");
 
 

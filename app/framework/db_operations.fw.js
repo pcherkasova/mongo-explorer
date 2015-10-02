@@ -1,7 +1,7 @@
 "use strict";
 
 var MongoClient = require('mongodb').MongoClient;
-var Q = require("Q");
+var Q = require("q");
 
 // returns promise
 exports.insert = function (connection, collection, doc) {

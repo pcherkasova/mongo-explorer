@@ -1,6 +1,6 @@
 "use strict";
 
-var Q = require("Q");
+var Q = require("q");
 var db_operations = require("./../../app/framework/db_operations.fw.js");
 var telemetryConnection = process.env.APP_TELEMETRY_DB;
 var collection = 'logs';
