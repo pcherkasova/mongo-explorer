@@ -1,17 +1,19 @@
 var http = require('http');
 var helpers = require('./../../public/js/helpers.js');
-var structures = require('./../../public/js/structures.js');
+var structures = require('./../../public/js/model.js');
 var MongoClient = require('mongodb').MongoClient;
 var Q = require("q");
 var should = require('should');
+var logging = require("../../app/core/logging.core.js");
 
 // returns HTML result
 exports.runQueryHTML = function (req, res, next) {
+    var id = Math.round(Math.random() * 100000000);
     var input = req.query;
     var output = { err: null, res: null };
-    console.log("runQueryHTML");
+    logging.logTrace(req.session, "runQueryHTML called", { coll: input.coll, operation: input.operation, query: input.q, id: id});
     
-    return runQuery(input.conn, input.coll, input.operation, input.q, structures.ROW_LIMIT
+    runQuery(input.conn, input.coll, input.operation, input.q, structures.ROW_LIMIT
     ).then(function (arr) {
         output.res = arr;   
     }).catch(function (err) {
@@ -23,11 +25,19 @@ exports.runQueryHTML = function (req, res, next) {
             output.err = { operational: true, errType: "Connection string format error." , details: err.message};
         }
         else {
-            output.err = { operational: true, errType: "Unexpected error." , details: ""}; 
-            console.log("Programming error: " + err.name)
+            output.err = { operational: true, errType: "Unexpected error.", details: "" }; 
+            logging.logError(req.session.id, err);
             throw err;
         }
     }).finally(function () {
+        if (output.err) {
+            logging.logTrace(req.session, "runQueryHTML success", { id: id, err: output.err });
+        } else if(output.res) {
+            logging.logTrace(req.session, "runQueryHTML failure", { id: id, res: output.res.length });
+        } else {
+            should.fail("output is not initialized");
+        }
+        
         res.json(output);
     }).done();
 }
@@ -72,9 +82,12 @@ var runQuery = function (connection, collName, operation, query, rowLimit) {
 }
 
 exports.getCollectionsHTML = function (req, res, next) {
+    var id = Math.round(Math.random() * 100000000);
+
     var input = req.query;
     var output = { err: null, res: null };
-    console.log("getCollections");
+    logging.logTrace(req.session, "getCollectionsHTML called"), { id: id };
+    
     var db;
     var colls;
     
@@ -103,12 +116,20 @@ exports.getCollectionsHTML = function (req, res, next) {
         } else if (err.name == "MongoError") {
             output.err = { operational: true, errType: "Mongo error.", details: err.message };
         } else {
-            output.err = { operational: true, errType: "Unexpected error." , details: ""}; 
-            console.log("Unexpected programming error: " + err.name + ": " + err.message);
+            output.err = { operational: true, errType: "Unexpected error.", details: "" }; 
+            logging.logError(req.session.id, err);
             throw err;
         }        
     }).finally(function () {
         if (db) db.close();
+        if (output.err) {
+            logging.logTrace(req.session, "runQueryHTML success", { id: id, err: output.err });
+        } else if(output.res) {
+            logging.logTrace(req.session, "runQueryHTML failure", { id: id, res: output.res.length });
+        } else {
+            should.fail("output is not initialized");
+        }
+        
         res.json(output);
     });
 }

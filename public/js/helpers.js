@@ -46,8 +46,8 @@ Date.prototype.toLocalSortableString = function() {
 
 
 
-exports.getURLParameter = function(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
+exports.getURLParameter = function(url, param) {
+    return decodeURIComponent((new RegExp('[?|&]' + param + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
 
 

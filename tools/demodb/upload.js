@@ -1,15 +1,19 @@
+"use strict";
+
 var MongoClient = require('mongodb').MongoClient;
 var fs = require('fs');
 var helpers = require('./../../public/js/helpers.js');
 var parse = require('csv-parse');
 var Q = require("q");
 
+var connectionString = process.env.DEMO_DB;
+// source ~/.bash_profile
 
 var db = null;
 
 Q.all([
 	loadDocs(),
-	MongoClient.connect("mongodb://dbwriter:123Secret123@ds037283.mongolab.com:37283/mongo-explorer-test")
+	MongoClient.connect(connectionString)
 ]).then(function (res) {
 	var docs = res[0];
 	db = res[1];

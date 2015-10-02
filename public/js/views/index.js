@@ -2,7 +2,7 @@
 "use strict";
 
 $(document).ready(function () {	
-	$("#connectionString").val("mongodb://auser:apassword@ds037283.mongolab.com:37283/mongo-explorer-test");
+	$("#connectionString").val(exports.DEMO_DB);
 	$("#query").val(exports.FIND_QUERY);
 	$("#resultHeader").html("Result (top " + exports.ROW_LIMIT + " documents)");
 	$("#colLimit").html("(up to " + exports.COL_LIMIT + " cols)");
@@ -13,11 +13,20 @@ $(document).ready(function () {
 	$("input[name='operation']").change(updateExample);
 	$("a[name='run']").click(runQuery);
 	
-	$("#stop").click(function(){currentRunRequest.abort();});
+	$("#stop").click(function () { currentRunRequest.abort(); });
 	
+	configureLogging();	
 	refreshCollections();	
 	
 });
+
+
+
+function configureLogging() {
+	
+	$("a[name='run']").on("click", {step:"1_examples", event:"runQuery", details:""}, logUserEvent);
+}
+
 
 function updateExample() {
 	var update = true;
@@ -56,9 +65,8 @@ function refreshCollections(){
 					function (o) { return o.name},
 					function (o) { return o.name + " (" + o.count + ")" }
 					));
-				if (output.res.length > 2) {
-					$("#collections").val(output.res[2].name);
-				}
+					
+				$("#collections").val(output.res[Math.min(2, output.res.length - 1)].name); 
 				$("#connectionError").html("");
 			}
 		}).fail(function(jqXHR, status, error){
@@ -69,6 +77,11 @@ function refreshCollections(){
 
 var currentRunRequest = null;				
 function runQuery() {
+	if (!$("#collections").val()){
+		alert("Please, select collection");
+		return;
+	}
+	
 	showStatus(STATUS.PROGRESS);
 
 	var input = {

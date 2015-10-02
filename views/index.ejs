@@ -21,13 +21,14 @@
     <link rel="stylesheet" href="../lib/jquery-modal/jquery.modal.css" type="text/css" media="screen" />
 
 	<script src="../js/helpers.js"></script>
-	<script src="../js/structures.js"></script>
+	<script src="../js/model.js"></script>
+	<script src="../js/logging.js"></script>
 	<script src="../js/views/index.js"></script>
 </head>
 <body>
 	<header class=" w3-theme">
 		<div class="w3-row">
-			<div class=" w3-container w3-half">
+			<div class="w3-container w3-half">
 				<h1>Mongo-Explorer</h1>
 			</div>
 			
@@ -52,8 +53,7 @@
 	</header>
 	<div class="w3-container">
 		<h2>Query your MongoDB online. </h2>
-		<p>Mongo-Explorer is opensource - <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">host inhouse, contribute or request new features.</a></p>
-		
+		<p>We are opensource: <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">host inhouse, request new features, contribute.</a></p>
 	</div>
 	
 	<div class="w3-container">
@@ -79,7 +79,7 @@
 					<select id="collections" class="w3-select w3-white" >
 						
 					</select>
-					<p id="connectionError" class="w3-tiny"></p>
+					<p style="width: 100%" id="connectionError" class="w3-tiny"></p>
 					<a class="w3-btn w3-theme w3-small" id="refreshCollections">Refresh</a>
 					<br>
 					<br>
@@ -156,14 +156,14 @@
 				      <div class="w3-checkmark"></div> Aggregate
 				    </label>	
 					<a class="w3-text-theme" href="http://docs.mongodb.org/manual/reference/method/db.collection.aggregate/" target="_blank"><i class="fa fa-question-circle" ></i></a>
-					<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-right" name="run">Run</a>
+					<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-right" name="run" id="runTop">Run</a>
 					
 					
 					
 				</div>
 				<textarea style="width:100%;"  rows="12" id="query" class="w3-textarea w3-code w3-small jsHigh"/></textarea><br>
 				<div class="w3-center">
-					<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-center" name="run">Run</a>
+					<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-center" name="run" id="runBottom">Run</a>
 				</div>
 				
 				<br>

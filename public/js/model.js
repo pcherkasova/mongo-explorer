@@ -6,6 +6,7 @@ if (typeof exports == 'undefined'){
     var exports = this['structures'] = {};
 }
 //////////////////////
+exports.DEMO_DB = "mongodb://auser:apassword@ds033103.mongolab.com:33103/mongo-explorer-demo"
 
 exports.ROW_LIMIT = 1000;
 exports.COL_LIMIT = 50;
@@ -24,4 +25,5 @@ exports.FIND_QUERY =
 	'    "sort": {"estimated_population": -1}\n' +
 '}\n';
 	
+
 	
