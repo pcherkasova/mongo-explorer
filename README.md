@@ -11,17 +11,22 @@ Mongo-exploprer is written in [nodejs](https://nodejs.org/en/), uses [mongodb](h
 
 #How to Host
 1. Install nodejs and npm
-2. Run commands:
+2. Set environment variables:
+
+  APP_SESSION_SECRET - any string
+  
+  APP_TELEMETRY_DB - connection string to telemetry DB in Mango engine
+
+3. Run commands:
 
   npm install
-  
-  bower install
   
   node server.js
 
 
 #How to Run Tests
-node tools/test/test.js
+1. Set environment variables like for hosting
+2. Run node tools/test/test.js
 
 
 
