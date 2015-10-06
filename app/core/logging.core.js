@@ -8,45 +8,52 @@ var collection = 'logs';
 
 
 exports.logUserEvent = function (session, name, step, details) {
+	var doc = {
+		event_type: 'user_event',
+		time: (new Date()).toISOString(),
+		session: session,
+		name: name,
+		step: step,
+		details: details
+	};
+	console.log("logUserEvent: " +  name);
 	return db_operations.insert(
 		telemetryConnection,
 		collection,
-		{
-			event_type: 'user_event',
-			time: (new Date()).toISOString(),
-			session: session,
-			name: name,
-			step: step,
-			details: details
-		}
+		doc		
 	)
 }
 
 exports.logError = function (session, err, details) {
+	var doc = {
+		event_type: 'error',
+		time: (new Date()).toISOString(),
+		session: session,
+		name: err.name,
+		message: err.message,
+		stack: (err.stack) ?  err.stack.toString():  (new Error(err.toString())).stack.toString(),
+		details: details
+	};
+	console.log("logError: " + doc.stack);
 	return db_operations.insert(
 		telemetryConnection,
 		collection,
-		{
-			event_type: 'error',
-			time: (new Date()).toISOString(),
-			session: session,
-			name: err.name,
-			message: err.message,
-			details: details
-		}
+		doc
 	)
 }
 
 exports.logTrace = function (session, name, details) {
-	return db_operations.insert(
-		telemetryConnection,
-		collection,
-		{
+	var doc = {
 			event_type: 'trace',
 			time: (new Date()).toISOString(),
 			session: session,
 			name: name,
 			details: details
-		}
+		};
+	console.log("logTrace: " +  name);
+	return db_operations.insert(
+		telemetryConnection,
+		collection,
+		doc
 	)
 }

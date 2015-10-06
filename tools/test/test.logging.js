@@ -3,7 +3,7 @@
 var should = require("should"); // https://github.com/shouldjs/should.js
 var logging = require("./../../app/core/logging.core.js");
 var Q = require("q");
-var model = require("./../../public/js/model.js");
+var model = require("./../../public/app/core/constants.js");
 var db_operations = require("./../../app/framework/db_operations.fw.js");
 
 var CONN_STRING = process.env.APP_TELEMETRY_DB;

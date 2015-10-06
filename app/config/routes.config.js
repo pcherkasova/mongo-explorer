@@ -9,7 +9,8 @@ module.exports = function (app) {
 		// ejs render automatically looks in the views folder
 		res.render('index');
 	});
-
+	
+	
 	// API calls
     app.route('/api/runQuery').get(explorerController.runQueryHTML);
 	app.route('/api/getCollections').get(explorerController.getCollectionsHTML);

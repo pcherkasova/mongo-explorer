@@ -1,6 +1,6 @@
 var http = require('http');
-var helpers = require('./../../public/js/helpers.js');
-var structures = require('./../../public/js/model.js');
+var helpers = require('./../../public/app/core/helpers.js');
+var structures = require('./../../public/app/core/constants.js');
 var MongoClient = require('mongodb').MongoClient;
 var Q = require("q");
 var should = require('should');
@@ -31,9 +31,9 @@ exports.runQueryHTML = function (req, res, next) {
         }
     }).finally(function () {
         if (output.err) {
-            logging.logTrace(req.session, "runQueryHTML success", { id: id, err: output.err });
+            logging.logTrace(req.session, "runQueryHTML failure", { id: id, err: output.err });
         } else if(output.res) {
-            logging.logTrace(req.session, "runQueryHTML failure", { id: id, res: output.res.length });
+            logging.logTrace(req.session, "runQueryHTML success", { id: id, res: output.res.length });
         } else {
             should.fail("output is not initialized");
         }
@@ -117,16 +117,17 @@ exports.getCollectionsHTML = function (req, res, next) {
             output.err = { operational: true, errType: "Mongo error.", details: err.message };
         } else {
             output.err = { operational: true, errType: "Unexpected error.", details: "" }; 
-            logging.logError(req.session.id, err);
+            logging.logError(req.session, err);
             throw err;
         }        
     }).finally(function () {
         if (db) db.close();
         if (output.err) {
-            logging.logTrace(req.session, "runQueryHTML success", { id: id, err: output.err });
+            logging.logTrace(req.session, "getCollectionsHTML failure", { id: id, err: output.err });
         } else if(output.res) {
-            logging.logTrace(req.session, "runQueryHTML failure", { id: id, res: output.res.length });
+            logging.logTrace(req.session, "getCollectionsHTML success", { id: id, res: output.res.length });
         } else {
+            logging.logError(req.session, "output is not initialized")
             should.fail("output is not initialized");
         }
         

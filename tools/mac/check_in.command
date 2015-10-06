@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "configure telemetry"
+git commit -m "port from JQuery to AngularJS"
 git push github master
 
 
