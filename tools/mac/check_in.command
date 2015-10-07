@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "port from JQuery to AngularJS"
+git commit -m "applying naming conventions"
 git push github master
 
 

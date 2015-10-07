@@ -1,7 +1,7 @@
 "use strict"
 
-var explorerController = require('../../app/controllers/explorer.controller.js'); 
-var loggingController = require('../../app/controllers/logging.controller.js'); 
+var explorerController = require('../../app/controllers/explorer.ctrl.js'); 
+var loggingController = require('../../app/controllers/logging.ctrl.js'); 
 
 module.exports = function (app) {
 	// UI calls

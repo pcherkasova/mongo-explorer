@@ -1,7 +1,7 @@
 "use strict";
 
 var should = require("should"); // https://github.com/shouldjs/should.js
-var controller = require("./../../app/controllers/explorer.controller.js");
+var controller = require("./../../app/controllers/explorer.ctrl.js");
 var Q = require("q");
 var model = require("./../../public/app/core/constants.js");
 

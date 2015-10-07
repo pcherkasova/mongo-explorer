@@ -2,7 +2,7 @@
 (function (angular) {
 
   var app = angular.module('app');
-  app.controller('appCtrl', function ($scope, $http) {
+  app.controller('AppCtrl', function ($scope, $http) {
 		// scope function definitions
 		
 		$scope.refreshCollections = function () {
