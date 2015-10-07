@@ -2,7 +2,7 @@
 (function (angular) {
 
   var app = angular.module('app');
-  app.controller('PrivacyPolicyCtrl', function ($scope, $modal, $log) {
+  app.controller('PrivacyPolicyCtrl', ["$scope", "$modal", "$log", function ($scope, $modal, $log) {
 
 		
 		$scope.animationsEnabled = true;
@@ -30,12 +30,12 @@
 		$scope.toggleAnimation = function () {
 			$scope.animationsEnabled = !$scope.animationsEnabled;
 		};
-	});
+	}]);
 		
 		// Please note that $modalInstance represents a modal window (instance) dependency.
 		// It is not the same as the $modal service used above.
 		
-	app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+	app.controller('ModalInstanceCtrl', ["$scope", "$modalInstance", function ($scope, $modalInstance) {
 		
 		
 		
@@ -47,7 +47,7 @@
 			$modalInstance.dismiss('cancel');
 		};
 
-	});
+	}]);
 	
 
 })(window.angular);

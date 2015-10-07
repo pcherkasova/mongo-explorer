@@ -2,7 +2,7 @@
 (function (angular) {
 
   var app = angular.module('app');
-  app.controller('AppCtrl', function ($scope, $http) {
+  app.controller('AppCtrl', ["$scope", "$http", function ($scope, $http) {
 		// scope function definitions
 		
 		$scope.refreshCollections = function () {
@@ -218,6 +218,6 @@
 		
 		$scope.refreshCollections(); 
 
-  });
+  }]);
     
 })(window.angular);

@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "applying naming conventions"
+git commit -m "small refactoring"
 git push github master
 
 
