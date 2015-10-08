@@ -2,7 +2,7 @@
 (function (angular) {
 
   var app = angular.module('app');
-  app.controller('AppCtrl', ["$scope", "$http", function ($scope, $http) {
+  app.controller('AppCtrl', ["$scope", "$http", '$document', '$compile',function ($scope, $http, $document, $compile) {
 		// scope function definitions
 		
 		$scope.refreshCollections = function () {
@@ -62,15 +62,15 @@
 			CANCELLED: 5
 		}
 		
-		$scope.scrollTo = function (selector) {
-			$("body").animate({scrollTop: $(selector).offset().top}, "slow");
-			
+		$scope.scrollTo = function (id) {
+			var element = angular.element(document.getElementById(id));
+            $document.scrollToElement(element, 0, 1000);
 		}
 		
 		
 		$scope.showStatus = function (status, details) {
 			
-			$scope.scrollTo("#result");
+			$scope.scrollTo("result");
 				
 			$scope.data.result.progress = (status === $scope.STATUS.PROGRESS);
 			$scope.data.result.error = "";
@@ -92,7 +92,8 @@
 			
 			}
 			
-			$("#result").html(result);
+			var el = document.getElementById('result');
+			el.innerHTML = result;
 			
 		}
 		
