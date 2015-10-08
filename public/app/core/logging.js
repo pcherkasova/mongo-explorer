@@ -1,5 +1,5 @@
 "use strict";
-
+//todo: include into angular module
 function logUserEvent(event) {
 	var input = event.data;
 	input.element = event.target.id;

@@ -3,7 +3,7 @@
 var should = require("should"); // https://github.com/shouldjs/should.js
 var controller = require("./../../app/controllers/explorer.ctrl.js");
 var Q = require("q");
-var model = require("./../../public/app/core/constants.js");
+var model = require("./../../public/app/shared/constants.js");
 
 
 var CONN_STRING = model.DEMO_DB;

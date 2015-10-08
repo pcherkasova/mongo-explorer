@@ -1,5 +1,5 @@
 var session = require('client-sessions');
-var helpers = require('./../../public/app/core/helpers.js');
+var helpers = require('./../../public/app/shared/helpers.js');
 var logging = require("./../../app/core/logging.core.js");
 
 module.exports = function (app) {
