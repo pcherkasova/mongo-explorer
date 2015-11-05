@@ -2,9 +2,9 @@
 
 
 /// we want this module to be available both in browser client and nodejs server
-if (typeof exports == 'undefined'){
-    var exports = this['structures'] = {};
-}
+if (typeof Window != "undefined")
+	var exports = this.$constants = {};
+
 //////////////////////
 exports.DEMO_DB = "mongodb://auser:apassword@ds033103.mongolab.com:33103/mongo-explorer-demo"
 
@@ -25,4 +25,3 @@ exports.FIND_QUERY =
 '}\n';
 	
 
-	

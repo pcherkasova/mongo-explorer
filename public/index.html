@@ -1,0 +1,295 @@
+
+<!doctype html>
+<html lang="en" ng-app="app" > 
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Query your MongoDB online without local installations. 
+		Worry about security? We use SSL and we promise not to store your data or connection sting. 
+		(We still are tracking user activity in order to provide the best user experience.) Still worry? 
+		So host the app locally. It is opensource." />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<base href="/">
+	<title>MongoDB Online Data Explorer</title>
+	
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../lib-no-bower/w3css/w3.css">
+	<link rel="stylesheet" href="../lib-no-bower/w3css/w3-theme-teal.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.4.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.7.3/angular-scroll.min.js"></script>
+	<script src="../lib/angulartics/src/angulartics.js"></script>
+
+	<script src="../app/shared/helpers.js"></script>
+	<script src="../app/shared/constants.js"></script>
+	<script src="../app/shared/errors.js"></script>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<script src="../app/app.client.js"></script>
+	<script src="../app/controllers/query.ctrl.client.js"></script>
+	<script src="../app/controllers/privacy.ctrl.client.js"></script>
+	
+	<!--script src="../app/modules/angulartics.sink.js"></script-->
+
+	
+	
+</head>
+<body ng-controller="QueryCtrl as query">
+	<header class=" w3-theme">
+		<div class="w3-row">
+			<div class="w3-container w3-half">
+				<h1>Mongo-Explorer</h1>
+			</div>
+			
+			<div class="w3-half">
+				
+				<div class="w3-large  w3-right">
+					<a href='https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=www.mongo-explorer.com' target='_blank'>
+						<img src='https://www.expeditedssl.com/ssl-secure-badge.png'  alt='Expedited SSL Scanner'>
+					</a>
+				</div>
+				<div class="w3-topnav w3-large  w3-right">
+					<a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer">GitHub</a>
+					<a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">Contact</a>
+				</div>
+			</div>
+		</div>
+	</header>
+	<div class="w3-container">
+		<h2>Query your MongoDB online. </h2>
+		<p>We are opensource: <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">host inhouse, request new features, contribute.</a></p>
+	</div>
+	
+	<form> 
+		<div class="w3-container" id="conectionHeader">
+			<div class="w3-card-2">
+				<div class="w3-container w3-theme  w3-padding-small">
+					Put your connection string here:
+				</div>
+				<div class="w3-container w3-theme-light">
+					<input ng-model="query.input.connection.value" style="width:100%; margin-bottom:0" class="w3-code  w3-small" placeholder="connection string"/>
+					<p class="w3-tiny w3-text-red">
+						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_EMPTY">Please, enter connection string.</span>
+						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_FORMAT">Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]".</span>
+						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_TIMED_OUT">The request to the server timed out.</span>
+						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_AUTH">Authentication failed.</span>
+						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_NO_SERVER">Could not connect to the server.</span>
+					</p>
+				</div>
+			</div>
+		</div>
+
+	
+		<div class="w3-row-padding w3-margin-top" id="collectionHeader">
+			<div class="w3-third">
+				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
+					<div class="w3-container w3-theme  w3-padding-small">
+						Collection
+					</div>
+					<div class="w3-container  w3-small">
+						<br>
+						<select 
+							ng-options="c.name as (c.name + ' (' + c.count + ')') for c in query.input.collection.options"
+							ng-model="query.input.collection.value" 
+							class="w3-select w3-white" >
+						</select>
+						<br>
+						<p class="w3-tiny w3-text-red">
+							<span ng-show="query.input.collection.value == '' && !query.output.refreshCollectionsProgress && query.output.getWrongControl() == 'connection'">Please, fix the connection string and click "Refresh" again.</span>
+							<span ng-show="query.output.lastError.get() == query.constant.errors.EMPTY_COLLECTION">Please, select collection.</span>
+						</p>
+						
+						<a class="w3-btn w3-theme w3-small" ng-disabled="query.output.refreshCollectionsProgress" ng-click="query.refreshCollections()">
+							Refresh
+							<span ng-show="query.output.refreshCollectionsProgress" >
+								<i class="fa fa-refresh fa-spin"></i>
+					    	</span>
+						</a>
+						<br>
+						<br>
+					</div>
+				</div>
+			</div>
+			
+			<div class="w3-third ">
+				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
+					<div class="w3-container w3-theme  w3-padding-small">
+						Format
+					</div>
+					<div class="w3-container w3-small">
+						<br>
+						<div  ng-repeat="i in query.input.format.options">	
+							<label class="w3-checkbox ">
+								<input type="radio" ng-model="query.input.format.value" ng-value="i.value">
+								<div class="w3-checkmark"></div> {{i.display}}
+							</label>
+							<br/>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="w3-third ">
+				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
+					<div class="w3-container w3-theme  w3-padding-small">
+						Delivery
+					</div>
+					<div class="w3-container w3-small">
+						<br>
+						<div  ng-repeat="i in query.input.delivery.options">	
+							<label class="w3-checkbox">
+								<input type="radio" ng-model="query.input.delivery.value" ng-value="i.value">
+								<div class="w3-checkmark"></div> {{i.display}}
+							</label>
+							<br/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="w3-container" id="queryHeader">
+			<br>
+			<div class="w3-card-2 ">
+				<div class="w3-container w3-theme  w3-padding-small">
+					Query
+				</div>
+				<div class="w3-container w3-theme-light">
+					<br>
+					
+					<span class="w3-small" ng-repeat="i in query.input.operation.options">
+						<label class="w3-checkbox">
+						<input type="radio" ng-model="query.input.operation.value" ng-value="i.value" ng-change="query.updateExample()">
+						<div class="w3-checkmark"></div> {{i.display}}
+						</label>
+						<a class="w3-text-theme" href="{{i.ref}}" analytics-on="click" analytics-event="{{i.value + '-help'}}" target="_blank"><i class="fa fa-question-circle" ></i></a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+					</span>
+					
+					<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-right" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runTop">
+						Run
+						<span ng-show="query.output.runQueryProgress" >
+								<i class="fa fa-refresh fa-spin"></i>
+					    </span>
+						
+					</a>
+					
+					<textarea style="width:100%;"  rows="12" ng-model="query.input.query.value" class="w3-textarea w3-code w3-small jsHigh"/></textarea>
+					<p class="w3-tiny w3-text-red">
+						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_EMPTY">Please, enter the query. If you want to select all documents, enter empty object: "{}".</span>
+						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_FORMAT">Please, fix the query to be correct JSON.</span>
+						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_EXECUTION">Failed to execute the query. {{query.output.lastErrorDetails}}</span>
+					</p>
+					
+					<div class="w3-center">
+						<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runBottom">
+							Run
+							<span ng-show="query.output.runQueryProgress" >
+								<i class="fa fa-refresh fa-spin"></i>
+					        </span>
+						</a>
+					</div>
+					
+					
+					<br>
+				</div>		
+			</div>
+		</div>
+	</form>
+				
+	<div class="w3-container">
+		<br>
+		<div class="w3-card-2">
+			<div ng-bind="query.constant.resultHeader"  id="resultHeader" class="w3-container w3-theme  w3-padding-small">
+				Result
+			</div>
+			<div class="w3-padding-small" id="result" style="min-height:20px; overflow: auto; ">
+				<!-- innerHTML to generate html table -->
+			</div>		
+		</div>
+	</div>
+				
+	<br>
+					
+	
+	
+	<div ng-controller="PrivacyPolicyCtrl as privacy">		
+		<footer class="w3-container w3-theme">
+			<div class="w3-row">
+				
+				<div class="w3-half">
+					<div class="w3-topnav">
+						<a class="w3-theme" ng-click="privacy.open('lg')" href="">Privacy Policy</a>
+						<a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer">GitHub</a>
+					</div>
+				</div>
+				<div class="w3-half">
+					<p>Thank you for using Mongo-Explorer! Your <a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">feedback and contributions</a> are very welcome. </p>
+				</div>
+			</div>
+		</footer>
+		
+	
+	
+		<script type="text/ng-template" id="privacyPolicyContent.html">
+			<div class="modal-header">
+				<a class="w3-btn w3-theme w3-small w3-right" ng-click="modalInstance.ok()">Close</a>
+				<h3 class="modal-title">Privacy Policy</h3>
+			</div>
+			<div class="modal-body">
+				<div style="overflow:scroll; height:400px;">
+					<p><em>All about cookies <a href="#cookies">here</a>.</em></p>
+					<p>We are committed to protecting your privacy. We will only use the information that we collect about you lawfully (in accordance with the relevant Data Protection Acts).</p>
+					<p>We collect information about you for 2 reasons: firstly, to process payments and second, to provide you with the best possible service.</p>
+					<p>We will not e-mail you in the future unless you have given us your consent, either explicitly, or by opting in to one of our email lists.</p>
+					<p>We will give you the chance to refuse (or unsubscribe from) any marketing email from us in the future.</p>
+					<p>We will never collect sensitive information about you without your explicit consent.</p>
+					<p>The information we hold will be accurate and up to date. You can check the information that we hold about you by emailing us. If you find any inaccuracies we will delete or correct it promptly.</p>
+					<p>The personal information which we hold will be held securely in accordance with our internal security policy and the law.</p>
+					<p>If we intend to transfer your information outside the EEA (European Economic Area) we will always obtain your consent first.</p>
+					<h1><a name="cookies"></a></h1>
+					<hr />
+					<p><strong>Cookies</strong></p>
+					<p>Cookies are small digital signature files that are stored by your web browser that allow your preferences to be recorded when visiting the website.  Also they may be used to track your return visits to the website. No personally identifiable information is stored by Mongo-Explorer. Third party advertising companies may also use cookies for tracking purposes.</p>
+					<p>You can browse websites with cookies switched off (and/or block third party cookies) by adjusting your web browser settings or preferences, however if you do so then our site may not function properly for you. You can also use your web browser’s settings or preferences to remove your cookies at any time, and some browsers will also have a setting that will enable them to be automatically deleted when you close it.</p>
+					<p><strong>Three of our cookies are <span style="text-decoration: underline;">essential</span> </strong>for our site to function properly and are not optional:</p>
+					<ul>
+					<li><strong>PHPSESSID</strong> is used by our website system to serve the right pages and information to the right visitor. It is deleted when you close your browser.</li>
+					</ul>
+					<ul>
+					<li><strong>Two PayPal</strong> third party cookies (once called ‘Apache that is set to last for 20 years, and other with a short 8 letter name which will be removed when you close your browser), which are used to determine the correct price of services shown. PayPal’s privacy policy is located here <a href="https://cms.paypal.com/uk/cgi-bin/marketingweb?cmd=_render-content&amp;content_ID=ua/Privacy_full&amp;locale.x=en_GB" target="_blank">https://paypal.com/uk/</a><strong></strong></li>
+					</ul>
+					<p><strong><span style="text-decoration: underline;">Optional</span></strong><strong> cookies</strong> are only set with your consent; they will stay set for 2 years unless you delete them or switch off consent below.</p>
+					<p><strong><span style="text-decoration: underline;">Optional First Party Cookies</span></strong></p>
+					<p><strong>Five Google Analytics cookies: (that begin with ‘__utm’) </strong>so that we can have access to Google Analytics services. You can read more about Google Analytics on their site <a href="http://www.google.com/analytics/index.html" target="_blank">here</a>, if you wish to see why we find it so useful. Google stores the analytics data, not us. Google collects information about how you got to our site, and how you moved around it, and further information on the data they collect is available at <a href="http://www.google.com/policies/privacy/" target="_blank">on their site here</a>. We don’t gain access to personally identifiable information through Google Analytics, it merely provides us with trends and analysis.<strong></strong></p>
+					<p><strong>Cookies</strong> &amp; <strong>Showrecind</strong>. These cookies let our website remember if you have consented to our optional cookies. Showrescind will be deleted when you close your browser, and Cookies will remain for up to two years so that we don’t keep asking you for permission (Although you can clear cookies on your computer yourself, and also change your mind by using our off/off switch above).</p>
+					<p>&nbsp;</p>
+					<p><strong><span style="text-decoration: underline;">Optional </span></strong><strong><span style="text-decoration: underline;">Third party cookies</span></strong></p>
+					<p>Third party cookies are cookies that are not actually set by our website, but are set by other websites via embedded components in our website. As such, while we will obtain your consent prior to setting these cookies, you will need to refer to their own privacy policies for information about their information usage.</p>
+					<p>One cookie set with the domain name <strong>forms.aweber.com</strong>. This cookie is deleted when the visitor closes their browser. We use <strong>Aweber</strong> forms to enable you to get in contact with us and sign up to mailing lists. Aweber’s privacy policy is located here <a href="http://www.aweber.com/privacy.htm" target="_blank">http://www.aweber.com/privacy.htm</a></p>
+					
+					<p>&nbsp;</p>
+					<h2><strong>Links to other websites:</strong></h2>
+					<p>Our website may contain links to enable you to visit other websites of interest easily. However, once you have used these links to leave our site, you should note that we do not have any control over that other website. Therefore, we cannot be responsible for the protection and privacy of any information which you provide whilst visiting such sites and such sites are not governed by this privacy statement. You should exercise caution and look at the privacy statement applicable to the website in question.</p>
+					<p style="text-align: center;">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
+					<p>If you have any questions/comments about privacy, you should <a href="https://github.com/pcherkasova/mongo-explorer/issues" target="_blank">contact us</a>.</p>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<a class="w3-btn w3-theme w3-small w3-right" ng-click="modalInstance.ok()">Close</a>
+				
+			</div>
+		</script>
+	
+		
+	</div>
+  
+	
+
+
+</body>
+</html>

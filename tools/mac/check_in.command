@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "remove JQuery dependancy"
+git commit -m "error handling"
 git push github master
 
 

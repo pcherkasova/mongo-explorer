@@ -5,3 +5,6 @@ undo commits:
 git log
 git reset --hard e36bf0b2399aa3a0ec972jghfklkuh32891a785
 git push github master --force
+
+force env vareables:
+source ~/.bash_profile

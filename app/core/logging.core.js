@@ -31,7 +31,7 @@ exports.logError = function (session, err, details) {
 		session: session,
 		name: err.name,
 		message: err.message,
-		stack: (err.stack) ?  err.stack.toString():  (new Error(err.toString())).stack.toString(),
+		stack: (err.stack) ?  err.stack:  (new Error(err)).stack,
 		details: details
 	};
 	console.log("logError: " + doc.stack);
@@ -57,3 +57,4 @@ exports.logTrace = function (session, name, details) {
 		doc
 	)
 }
+

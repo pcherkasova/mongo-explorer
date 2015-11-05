@@ -2,6 +2,6 @@
   "name": "mongo-explorer",
   "dependencies": {
     
-    
+    "angulartics": "0.20.1"
   }
 }

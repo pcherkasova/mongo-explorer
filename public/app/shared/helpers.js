@@ -2,9 +2,8 @@
 
 
 /// we want this module to be available both in browser client and nodejs server
-if (typeof exports == 'undefined'){
-    var exports = this['helpers'] = {};
-}
+if (typeof Window != "undefined")
+	var exports = this.$helpers = {};
 //////////////////////
 
 Number.prototype.format = function(decimalPlaces){
@@ -44,6 +43,10 @@ exports.getURLParameter = function(url, param) {
     return decodeURIComponent((new RegExp('[?|&]' + param + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
 
+
+exports.isValidJSON = function(json) {
+
+}
 
 
 

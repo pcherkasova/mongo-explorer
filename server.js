@@ -3,11 +3,10 @@
 var express = require('express');
 var app = express();
 
-//source ~/.bash_profile
+
 app.set('port', process.env.PORT || 8080);
 app.set('env', process.env.NODE_ENV || 'development');
 app.set('session_secret', process.env.APP_SESSION_SECRET );
-app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'));
 require('./app/config/ssl.config.js')(app); 
