@@ -93,11 +93,9 @@ var runQuery = function (connection, collName, operation, query, rowLimit) {
 // returns array of collection names and count of documents
 exports.getCollectionsHTTP = function (req, res, next) {
     var start = new Date().getTime();
-    var id = Math.round(Math.random() * 100000000);
-
+    
     var input = req.query;
     var output = { err: null, res: null };
-    logging.logTrace(req.session, "getCollectionsHTTP called", { input: input, id: id });
     
     var db;
     var colls;

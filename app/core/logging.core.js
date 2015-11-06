@@ -5,18 +5,24 @@ var db_operations = require("./../../app/framework/db_operations.fw.js");
 var telemetryConnection = process.env.APP_TELEMETRY_DB;
 var collection = 'logs';
 
+var version = require('./../../package.json').version;
 
-
-exports.logUserEvent = function (session, name, step, details) {
-	var doc = {
-		event_type: 'user_event',
+function getDocTemplate(session, name, details, event_type){
+	console.log(event_type + ": " +  name + ", " + session.id);
+	return {
+		version: version,
+		event_type: event_type,
 		time: (new Date()).toISOString(),
 		session: session,
 		name: name,
-		step: step,
 		details: details
 	};
-	console.log("logUserEvent: " +  name);
+	
+}
+
+exports.logUserEvent = function (session, name, step, details) {
+	var doc = getDocTemplate(session, name, details, 'user_event');
+	doc.step = step;
 	return db_operations.insert(
 		telemetryConnection,
 		collection,
@@ -25,16 +31,9 @@ exports.logUserEvent = function (session, name, step, details) {
 }
 
 exports.logError = function (session, err, details) {
-	var doc = {
-		event_type: 'error',
-		time: (new Date()).toISOString(),
-		session: session,
-		name: err.name,
-		message: err.message,
-		stack: (err.stack) ?  err.stack:  (new Error(err)).stack,
-		details: details
-	};
-	console.log("logError: " + doc.stack);
+	var doc = getDocTemplate(session, err.name, details, 'error');
+	doc.message = err.message;
+	doc.stack = (err.stack) ?  err.stack:  (new Error(err)).stack;
 	return db_operations.insert(
 		telemetryConnection,
 		collection,
@@ -43,14 +42,7 @@ exports.logError = function (session, err, details) {
 }
 
 exports.logTrace = function (session, name, details) {
-	var doc = {
-			event_type: 'trace',
-			time: (new Date()).toISOString(),
-			session: session,
-			name: name,
-			details: details
-		};
-	console.log("logTrace: " +  name);
+	var doc = getDocTemplate(session, name, details, 'trace');
 	return db_operations.insert(
 		telemetryConnection,
 		collection,

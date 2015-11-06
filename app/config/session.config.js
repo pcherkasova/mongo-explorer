@@ -3,6 +3,8 @@ var helpers = require('./../../public/app/shared/helpers.js');
 var logging = require("./../../app/core/logging.core.js");
 
 module.exports = function (app) {
+ 
+  
   app.use(session({
     cookieName: 'session',
     secret: app.get('session_secret'),
@@ -16,17 +18,23 @@ module.exports = function (app) {
   app.use(function (req, res, next) {
     if (!req.session.id){
       req.session.id = "s" + Math.round(Math.random() * 100000000);
-      req.session.url = req.url;
+      
+      console.log('new session: ' + req.session.id + ', ' + req.url);
+      
+      req.session.first_url = req.url;
       req.session.src = helpers.getURLParameter(req.url, "s");
       req.session.user_agent = req.headers["user-agent"];
-      req.session.user_type = detectUserType(req.session.user_agent, req.url, app.get('env'));
+      req.session.user_type = detectUserType(req.session.user_agent, req.url, app.get('env'), req.session.src);
     }
-    next();
+    return next();
   });
 }
   
-function detectUserType(user_agent, path, environment) {
+function detectUserType(user_agent, path, environment, src) {
   var user_type = environment;
+  
+  if (src == 'test')
+    user_type =  'test'; 
   
   var a = user_agent.toLowerCase();
   var p = path.toLowerCase();
