@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "error handling"
+git commit -m "tracing"
 git push github master
 
 

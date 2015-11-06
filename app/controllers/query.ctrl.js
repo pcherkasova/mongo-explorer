@@ -10,12 +10,10 @@ var logging = require("../../app/core/logging.core.js");
 
 // returns HTTP result
 exports.runQueryHTTP = function (req, res, next) {
-    var id = Math.round(Math.random() * 100000000);
-    
-    
+    var start = new Date().getTime();
+
     var input = req.query;
     var output = { err: null, res: null };
-    logging.logTrace(req.session, "runQueryHTTP called", { input: input, id: id });
     
     runQuery(input.conn, input.coll, input.operation, JSON.parse(input.q), constants.ROW_LIMIT
     ).then(function (arr) {
@@ -25,7 +23,8 @@ exports.runQueryHTTP = function (req, res, next) {
         if (output.err.code == errors.ERR.MONGO.UNEXPECTED) 
             throw err;
     }).finally(function () {
-        logging.logTrace(req.session, "runQueryHTTP done", { input: input, id: id, res: output.res? output.res.length: undefined, err: output.err });
+        input.conn = undefined; // we do not want to store connection string
+        logging.logTrace(req.session, "runQueryHTTP", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
         res.json(output);
     }).done();
 }
@@ -56,6 +55,7 @@ exports.processMongoError = function (err, session) {
 
 // returns promise with array
 var runQuery = function (connection, collName, operation, query, rowLimit) {
+    
     var db;
     return Q.try(function () { 
         if (!collName) {
@@ -92,6 +92,7 @@ var runQuery = function (connection, collName, operation, query, rowLimit) {
 
 // returns array of collection names and count of documents
 exports.getCollectionsHTTP = function (req, res, next) {
+    var start = new Date().getTime();
     var id = Math.round(Math.random() * 100000000);
 
     var input = req.query;
@@ -124,7 +125,8 @@ exports.getCollectionsHTTP = function (req, res, next) {
             throw err;
     }).finally(function () {
         if (db) db.close();
-        logging.logTrace(req.session, "getCollectionsHTTP done", { input: input, id: id, res: output.res? output.res.length: undefined, err: output.err });
+        input.conn = undefined; // we do not want to store connection string
+        logging.logTrace(req.session, "getCollectionsHTTP", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
         res.json(output);
     });
 }
