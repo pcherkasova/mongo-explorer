@@ -23,9 +23,9 @@ module.exports = function (app) {
     }
     next();
   });
-  }
+}
   
-  function detectUserType(user_agent, path, environment) {
+function detectUserType(user_agent, path, environment) {
   var user_type = environment;
   
   var a = user_agent.toLowerCase();
