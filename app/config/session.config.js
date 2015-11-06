@@ -18,14 +18,12 @@ module.exports = function (app) {
   app.use(function (req, res, next) {
     if (!req.session.id){
       req.session.id = "s" + Math.round(Math.random() * 100000000);
-      
-      console.log('new session: ' + req.session.id + ', ' + req.url);
-      
       req.session.first_url = req.url;
       req.session.src = helpers.getURLParameter(req.url, "s");
       req.session.user_agent = req.headers["user-agent"];
       req.session.user_type = detectUserType(req.session.user_agent, req.url, app.get('env'), req.session.src);
     }
+    logging.logTrace(req.session, 'new-session');
     return next();
   });
 }

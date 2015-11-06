@@ -12,9 +12,9 @@ function getDocTemplate(session, name, details, event_type){
 	return {
 		version: version,
 		event_type: event_type,
-		time: (new Date()).toISOString(),
-		session: session,
 		name: name,
+		session: session,
+		time: (new Date()).toISOString(),
 		details: details
 	};
 	

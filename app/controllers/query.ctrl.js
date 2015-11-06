@@ -24,7 +24,7 @@ exports.runQueryHTTP = function (req, res, next) {
             throw err;
     }).finally(function () {
         input.conn = undefined; // we do not want to store connection string
-        logging.logTrace(req.session, "runQueryHTTP", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
+        logging.logTrace(req.session, "run-query", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
         res.json(output);
     }).done();
 }
@@ -124,7 +124,7 @@ exports.getCollectionsHTTP = function (req, res, next) {
     }).finally(function () {
         if (db) db.close();
         input.conn = undefined; // we do not want to store connection string
-        logging.logTrace(req.session, "getCollectionsHTTP", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
+        logging.logTrace(req.session, "get-collections", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
         res.json(output);
     });
 }
