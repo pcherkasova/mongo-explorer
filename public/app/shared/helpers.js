@@ -153,7 +153,7 @@ exports.arrayToCSV = function (array, lineSeparator) {
     
     for (var i in array) {
         
-        var obj = exports.pressObject(array[i]);
+        var obj = this.pressObject(array[i]);
         var rowStart = true;
         
         // write all known fields
@@ -213,7 +213,7 @@ exports.arrayToHTMLTable = function (array, className, maxColNum) {
     
     for (var i in array) {
         
-        var obj = exports.pressObject(array[i]);
+        var obj = this.pressObject(array[i]);
         
         data += "<tr>";
         

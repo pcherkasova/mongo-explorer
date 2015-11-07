@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "tracing"
+git commit -m "testing and debugging"
 git push github master
 
 

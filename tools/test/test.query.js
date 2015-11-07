@@ -1,7 +1,7 @@
 "use strict";
 
 var should = require("should"); // https://github.com/shouldjs/should.js
-var controller = require("./../../app/controllers/explorer.ctrl.js");
+var controller = require("./../../app/controllers/query.ctrl.js");
 var Q = require("q");
 var constants = require("./../../public/app/shared/constants.js");
 var errors = require("./../../public/app/shared/errors.js");
@@ -33,7 +33,7 @@ exports.tests.push(runQueryWrongQuery);
 
 function getCollections() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING }, session: { user_type: 'development' } };
+		req = { query: { conn: CONN_STRING }, session: { id:'test', user_type: 'development' } };
 		res = { json: resolve }
 		controller.getCollectionsHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -52,7 +52,7 @@ function getCollections() {
 
 function getCollectionsNoServer() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING.replace("mongolab.com", "haha.com")}, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING.replace("mongolab.com", "haha.com")}, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.getCollectionsHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -68,7 +68,7 @@ function getCollectionsNoServer() {
 
 function runQueryFind() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: constants.FIND_QUERY }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: constants.FIND_QUERY }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -83,7 +83,7 @@ function runQueryFind() {
 
 function runQueryAggr() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -99,7 +99,7 @@ function runQueryAggr() {
 
 function runQueryWrongCollection() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: "hahaha", operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: "hahaha", operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -112,7 +112,7 @@ function runQueryWrongCollection() {
 
 function getCollectionsWrongConnectionFormat() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: "hahaha" }, session: { user_type: 'development' }  };
+		req = { query: { conn: "hahaha" }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.getCollectionsHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -128,7 +128,7 @@ function getCollectionsWrongConnectionFormat() {
 
 function runQueryAuthentication() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING.replace("auser:apassword", "ha:ha"), coll: COLL_NAME, operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING.replace("auser:apassword", "ha:ha"), coll: COLL_NAME, operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -144,7 +144,7 @@ function runQueryAuthentication() {
 
 function runQueryEmptyCollection() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: "", operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: "", operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -158,7 +158,7 @@ function runQueryEmptyCollection() {
 
 function runQueryWrongConnectionFormat() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: "hahaha", coll: COLL_NAME, operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { user_type: 'development' }  };
+		req = { query: { conn: "hahaha", coll: COLL_NAME, operation: "aggr", q: constants.AGGREGATE_QUERY }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -174,7 +174,7 @@ function runQueryWrongConnectionFormat() {
 
 function runQueryEmptyQuery() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: "" }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: "" }, session: { id:'test',  user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -188,7 +188,7 @@ function runQueryEmptyQuery() {
 
 function runQueryWrongJSON() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: "ha ha" }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: "ha ha" }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {
@@ -202,7 +202,7 @@ function runQueryWrongJSON() {
 
 function runQueryWrongQuery() {
 	return Q.Promise(function (resolve, reject, notify) {
-		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: '{ "query": { "$haha": 25 } }' }, session: { user_type: 'development' }  };
+		req = { query: { conn: CONN_STRING, coll: COLL_NAME, operation: "find", q: '{ "query": { "$haha": 25 } }' }, session: { id:'test', user_type: 'development' }  };
 		res = { json: resolve }
 		controller.runQueryHTTP(req, res, undefined);
 	}).then(function (output) {

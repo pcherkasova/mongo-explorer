@@ -1,7 +1,7 @@
 "use strict";
 
-var test_explorer = require("./test.explorer.js"); 
-var test_logging = require("./test.logging.js"); 
+var test_explorer = require("./tools/test/test.query.js"); 
+var test_logging = require("./tools/test/test.logging.js"); 
 var Q = require("q");
 
 var tests = [];

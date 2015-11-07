@@ -1,3 +1,7 @@
+"use strict";
+
+
+
 var http = require('http');
 var MongoClient = require('mongodb').MongoClient;
 var Q = require("q");
@@ -14,9 +18,17 @@ exports.runQueryHTTP = function (req, res, next) {
 
     var input = req.query;
     var output = { err: null, res: null };
+    var q;
     
-    runQuery(input.conn, input.coll, input.operation, JSON.parse(input.q), constants.ROW_LIMIT
-    ).then(function (arr) {
+    Q.try(function () {
+        try {
+            q = JSON.parse(input.q);
+        } catch (err) {
+            throw new errors.AppError(errors.ERR.MONGO.QUERY_FORMAT);
+        }
+    }).then(function () {
+        return runQuery(input.conn, input.coll, input.operation, q, constants.ROW_LIMIT);
+    }).then(function (arr) {
         output.res = arr;   
     }).catch(function (err) {
         output.err = exports.processMongoError(err, req.session.id);

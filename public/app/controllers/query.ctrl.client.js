@@ -136,8 +136,6 @@
 		
 		
 		this.scrollTo = function (selector) {
-			console.log("scroll to " + selector);
-			
 			var element = angular.element(selector);
 			$document.scrollToElement(element, 0, 500);
 		}
@@ -166,7 +164,7 @@
 					if (this.input.delivery.value == "web"){
 						tableClass = "w3-table w3-bordered w3-striped";
 					}
-					result = window.$constants.arrayToHTMLTable(arr, tableClass, window.$constants.COL_LIMIT); 
+					result = window.$helpers.arrayToHTMLTable(arr, tableClass, window.$constants.COL_LIMIT); 
 					filename = filename + ".html";
 					break;
 			}

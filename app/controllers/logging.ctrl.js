@@ -1,3 +1,7 @@
+"use strict";
+
+
+
 // var logging = require("../../app/core/logging.core.js");
 
 // exports.logUserEventHTTP = function (req, res, next) {
