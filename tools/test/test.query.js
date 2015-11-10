@@ -7,6 +7,7 @@ var constants = require("./../../public/app/shared/constants.js");
 var errors = require("./../../public/app/shared/errors.js");
 
 var CONN_STRING = constants.DEMO_DB;
+
 var COLL_NAME = "us-zip-codes";
 var req, res;
 

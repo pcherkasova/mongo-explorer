@@ -1,9 +1,11 @@
 "use strict";
 
-
 /// we want this module to be available both in browser client and nodejs server
-if (typeof Window != "undefined")
+if (typeof Window != "undefined"){
 	var exports = this.$constants = {};
+	
+}
+	
 
 //////////////////////
 exports.DEMO_DB = "mongodb://auser:apassword@ds033103.mongolab.com:33103/mongo-explorer-demo"
@@ -21,7 +23,8 @@ exports.AGGREGATE_QUERY =
 exports.FIND_QUERY =
 	'{\n' +
 	'    "query": {"type": "STANDARD"},\n' +
-	'    "projection":{"zip":1, "type":1, "state":1, "primary_city":1, "estimated_population":1}\n' +	
-'}\n';
+	'    "projection":{"zip":1, "type":1, "state":1, "primary_city":1, "estimated_population":1},\n' +
+	'    "sort" : {"estimated_population":-1}\n' +	
+	'}\n';
 	
 

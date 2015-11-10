@@ -7,4 +7,9 @@ git reset --hard e36bf0b2399aa3a0ec972jghfklkuh32891a785
 git push github master --force
 
 force env vareables:
+touch .bash_profile
 source ~/.bash_profile
+
+see hidden files:
+defaults write com.apple.finder AppleShowAllFiles YES
+killall Finder
