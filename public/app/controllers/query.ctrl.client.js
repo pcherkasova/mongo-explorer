@@ -207,7 +207,7 @@
 					{ value: "json", display: "JSON" },
 					{ value: "csv", display: "CSV" },
 					{ value: "html", display: "HTML (up to " + window.$constants.COL_LIMIT + " cols)" }],
-				value: "json"
+				value: "html"
 			},
 			
 			delivery:{
