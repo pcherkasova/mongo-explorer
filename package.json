@@ -4,7 +4,8 @@
   "description": "MongoDB free online data explorer.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "bower install"
   },
   "dependencies": {
     
