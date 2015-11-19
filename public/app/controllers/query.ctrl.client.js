@@ -116,21 +116,16 @@
 				);
 		}	
 
-		this.updateExample = function () {
-			var update = true;
-	
-			switch (this.input.query.value){
-				case "": case window.$constants.FIND_QUERY: case window.$constants.AGGREGATE_QUERY: break;
-				default: update = (confirm("Do you want to replace the query text with example?"));
-			}
+		this.switchText = function () {
 			
-			if (!update) return;
+			// remember current text to the tab
+			this.input.query.tabs[this.input.operation.prevValue] = this.input.query.value;
 			
-			switch (this.input.operation.value) {
-				case "find": this.input.query.value = window.$constants.FIND_QUERY; break;
-				case "aggr": this.input.query.value = window.$constants.AGGREGATE_QUERY; break;
-				default: this.setUnexpectedClientError("Wrong name of operation: " + this.input.operation.value + ".");
-			}
+			// change current text to remembered one
+			this.input.query.value = this.input.query.tabs[this.input.operation.value];
+			
+			// switch prev value
+			this.input.operation.prevValue = this.input.operation.value;
 		}
 		
 		
@@ -207,7 +202,12 @@
 			},
 			
 			query: 	{
-				value: window.$constants.FIND_QUERY
+				value: window.$constants.FIND_QUERY,
+
+				tabs: {
+					"aggr":window.$constants.AGGREGATE_QUERY,
+					"find":window.$constants.FIND_QUERY
+				}
 			},
 			
 			format:{
@@ -229,7 +229,8 @@
 				options: [
 					{ value: "find", display: "Find", ref: "http://docs.mongodb.org/manual/reference/method/db.collection.find/"},
 					{ value: "aggr", display: "Aggregate", ref: "http://docs.mongodb.org/manual/reference/method/db.collection.aggregate/" }],
-				value: "find"
+				value: "find",
+				prevValue: "find"
 			},
 			
 			

@@ -179,7 +179,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 					
 					<span class="w3-small" ng-repeat="i in query.input.operation.options">
 						<label class="w3-checkbox">
-						<input type="radio" ng-model="query.input.operation.value" ng-value="i.value" ng-change="query.updateExample()">
+						<input type="radio" ng-model="query.input.operation.value" ng-value="i.value" ng-change="query.switchText()">
 						<div class="w3-checkmark"></div> {{i.display}}
 						</label>
 						<a class="w3-text-theme" href="{{i.ref}}" analytics-on="click" analytics-event="{{i.value + '-help'}}" target="_blank"><i class="fa fa-question-circle" ></i></a>

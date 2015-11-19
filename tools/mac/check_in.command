@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "adopted Ace code editor"
+git commit -m "modified user experience for changing operation"
 git push github master
 
 
