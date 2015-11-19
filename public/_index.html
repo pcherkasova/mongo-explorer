@@ -1,4 +1,5 @@
-
+<!-- the name "index.html" is hardcoded and specially processed in express. 
+We do not want it. That's why the page's name is "_index.html" -->
 <!doctype html>
 <html lang="en" ng-app="app" > 
 <head>
@@ -8,16 +9,42 @@
 	<base href="/">
 	<title>MongoDB Online Data Explorer</title>
 	
+	<link rel="apple-touch-icon" sizes="57x57" href="../icon/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="../icon/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="../icon/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="../icon/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="../icon/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="../icon/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="../icon/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="../icon/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="../icon/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="../icon/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="../icon/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="../icon/favicon-16x16.png">
+	<link rel="manifest" href="../icon/manifest.json">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="../icon/ms-icon-144x144.png">
+	<meta name="theme-color" content="#ffffff">
+	
+	
+	
+	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../lib-no-bower/w3css/w3.css">
 	<link rel="stylesheet" href="../lib-no-bower/w3css/w3-theme-teal.css">
-
+	
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+	<script type="text/javascript" src="../lib/angular/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.4.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.7.3/angular-scroll.min.js"></script>
+	
+	<script type="text/javascript" src="../lib/ace-builds/src-min-noconflict/ace.js"></script>
+	
+	<script type="text/javascript" src="../lib/angular-ui-ace/ui-ace.js"></script>
 	
 
 	<script src="../app/shared/helpers.js?2"></script>
@@ -53,7 +80,6 @@
 		<h2>Query your MongoDB online. </h2>
 		<p>We are opensource: <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer">host inhouse, request new features, contribute.</a></p>
 	</div>
-	
 	<form> 
 		<div class="w3-container" id="conectionHeader">
 			<div class="w3-card-2">
@@ -167,8 +193,16 @@
 					    </span>
 						
 					</a>
-					
-					<textarea style="width:100%;"  rows="12" ng-model="query.input.query.value" class="w3-textarea w3-code w3-small jsHigh"/></textarea>
+					<br><br>
+					<div class="w3-border">
+						<div id="aceEditor" ui-ace="{mode:'json'}" ng-model="query.input.query.value"></div>
+						<script>
+							var aceEditor = ace.edit("aceEditor");
+							aceEditor.setHighlightActiveLine(false);
+							aceEditor.$blockScrolling = Infinity;
+						</script>
+					</div>
+					<br>
 					<p class="w3-tiny w3-text-red">
 						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_EMPTY">Please, enter the query. If you want to select all documents, enter empty object: "{}".</span>
 						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_FORMAT">Please, fix the query to be correct JSON.</span>

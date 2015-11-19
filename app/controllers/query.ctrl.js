@@ -7,10 +7,11 @@ var MongoClient = require('mongodb').MongoClient;
 var Q = require("q");
 var should = require('should');
 
-var helpers = require('./../../public/app/shared/helpers.js');
+var helpers   = require('./../../public/app/shared/helpers.js');
 var constants = require('./../../public/app/shared/constants.js');
-var errors = require('./../../public/app/shared/errors.js');
-var logging = require("../../app/core/logging.core.js");
+var errors    = require('./../../public/app/shared/errors.js');
+var logging   = require('./../../app/core/logging.core.js');
+var hashing   = require('./../../app/framework/hashing.fw.js');
 
 // returns HTTP result
 exports.runQueryHTTP = function (req, res, next) {
@@ -35,7 +36,7 @@ exports.runQueryHTTP = function (req, res, next) {
         if (output.err.code == errors.ERR.MONGO.UNEXPECTED) 
             throw err;
     }).finally(function () {
-        input.conn = undefined; // we do not want to store connection string
+        input.conn = hashConnString(input.conn);  // we do not want to store connection string
         logging.logTrace(req.session, "run-query", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
         res.json(output);
     }).done();
@@ -101,6 +102,15 @@ var runQuery = function (connection, collName, operation, query, rowLimit) {
     });
 }
 
+var hashConnString = function(connString){
+    if (connString === constants.DEMO_DB)
+        return "demo";
+    if (connString === process.env.APP_TELEMETRY_DB)
+        return "logs";
+        
+    return hashing.hashString(connString);
+}
+
 
 // returns array of collection names and count of documents
 exports.getCollectionsHTTP = function (req, res, next) {
@@ -135,7 +145,7 @@ exports.getCollectionsHTTP = function (req, res, next) {
             throw err;
     }).finally(function () {
         if (db) db.close();
-        input.conn = undefined; // we do not want to store connection string
+        input.conn = hashConnString(input.conn); // we do not want to store connection string
         logging.logTrace(req.session, "get-collections", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
         res.json(output);
     });

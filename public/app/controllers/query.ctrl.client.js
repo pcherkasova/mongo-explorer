@@ -4,7 +4,12 @@
 (function (angular) {
 	var app = angular.module('app');
 
-	app.controller('QueryCtrl', ["$timeout",  "$http", '$document', '$compile', function ($timeout, $http, $document, $compile) {
+	app.controller('QueryCtrl', ["$timeout",  "$http", '$document', '$compile', '$scope', function ($timeout, $http, $document, $compile, $scope) {
+		
+		window.onbeforeunload = function (e) {
+			return "";      
+		};
+		
 		
 		// form validation
 		// we do not use angular form validation, because of mutual dependancy of controls and overall complexity of the form
@@ -132,6 +137,9 @@
 		this.setUnexpectedClientError = function (description) {
 			this.output.lastError.set(this.errors.ERR.CLIENT_UNEXPECTED);
 			this.output.lastErrorDetails = description;
+			
+			alert("Unexpected error: " + description);
+			// TODO - log and show better message 
 		}
 		
 		
