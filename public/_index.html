@@ -89,6 +89,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 				</div>
 				<div class="w3-container w3-theme-light">
 					<input ng-model="query.input.connection.value" style="width:100%; margin-bottom:0" class="w3-code  w3-small" placeholder="connection string"/>
+					<a href="https://mongolab.com/" target="_blank" class="w3-right w3-text-theme w3-small">Create your MongoDB in cloud.</a>
 					<p class="w3-tiny w3-text-red">
 						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_EMPTY">Please, enter connection string.</span>
 						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_FORMAT">Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]".</span>
@@ -241,11 +242,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 						</div>
 					</div>
 				</div>
-			</div>s
-			
-			
-			
-			
+			</div>
 		</div>
 	</form>
 				

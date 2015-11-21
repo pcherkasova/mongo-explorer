@@ -37,7 +37,21 @@ exports.runQueryHTTP = function (req, res, next) {
             throw err;
     }).finally(function () {
         input.conn = hashConnString(input.conn);  // we do not want to store connection string
-        logging.logTrace(req.session, "run-query", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length: undefined, err: output.err });
+        var example = -1;
+        for (var i in constants.queryExamples)
+            if (constants.queryExamples[i].query === input.q)
+                {
+                    example = i;
+                    break;
+                }
+        logging.logTrace(req.session, "run-query", 
+            { 
+                duration: new Date().getTime() - start, 
+                input: input, 
+                res: output.res? output.res.
+                length: undefined, 
+                err: output.err,
+                example:  example});
         res.json(output);
     }).done();
 }

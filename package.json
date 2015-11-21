@@ -1,6 +1,6 @@
 {
   "name": "mongo-explorer",
-  "version": "01.00.00.0009",
+  "version": "01.00.00.0011",
   "description": "MongoDB free online data explorer.",
   "main": "server.js",
   "dependencies": {
