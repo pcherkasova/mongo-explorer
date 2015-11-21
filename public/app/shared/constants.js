@@ -12,19 +12,56 @@ exports.DEMO_DB = "mongodb://auser:apassword@ds033103.mongolab.com:33103/mongo-e
 
 exports.ROW_LIMIT = 1000;
 exports.COL_LIMIT = 50;
-
-exports.AGGREGATE_QUERY = 
-	'[\n' +
-	'    {"$match": { } },\n' +
-	'    {"$group": { "_id": "$type", "count": { "$sum": 1 }}},\n' +
-	'    {"$sort": { "count": -1 } }\n' +
-	']\n';
-
-exports.FIND_QUERY =
-	'{\n' +
-	'    "query": {"type": "STANDARD"},\n' +
-	'    "projection":{"zip":1, "type":1, "state":1, "primary_city":1, "estimated_population":1},\n' +
-	'    "sort" : {"estimated_population":-1}\n' +	
-	'}\n';
+	
+exports.queryExamples = [
+	{
+		name: "Get all documents.",
+		operation: "find",
+		query: '{}'
+	},
+	{
+		name: "Count zip codes by type.",
+		operation: "aggr",
+		query: '[\n' +
+		'    {"$match": { } },\n' +
+		'    {"$group": { "_id": "$type", "count": { "$sum": 1 }}},\n' +
+		'    {"$sort": { "count": -1 } }\n' +
+		']\n'
+	},
+	{
+		name: "List only standard zip codes.",
+		operation: "find",
+		query: '{\n' +
+		'    "query": {"type": "STANDARD"}\n' +
+		'}\n'
+	},
+	{
+		name: "Order standars zip codes by population and show only important fields",
+		operation: "find",
+		query: '{\n' +
+		'    "query": {"type": "STANDARD"},\n' +
+		'    "projection":{"zip":1, "type":1, "state":1, "primary_city":1, "estimated_population":1},\n' +
+		'    "sort" : {"estimated_population":-1}\n' +	
+		'}\n'
+	},
+	{
+		name: "Count zip codes by states.",
+		operation: "aggr",
+		query: '[\n' +
+		'    {"$match": { "type": "STANDARD" } },\n' +
+		'    {"$group": { "_id": "$state", "count": { "$sum": 1 }}},\n' +
+		'    {"$sort": { "count": -1 } }\n' +
+		']\n'
+	},
+	{
+		name: "Averege population per zip by state.",
+		operation: "aggr",
+		query: '[\n' +
+		'    {"$match": { "type": "STANDARD" } },\n' +
+		'    {"$group": { "_id": "$state", "population-per-zip": { "$avg": "$estimated_population" }}},\n' +
+		'    {"$sort": { "population-per-zip": -1 } }\n' +
+		']\n'
+	}
+];
 	
 

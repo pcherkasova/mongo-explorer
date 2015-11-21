@@ -24,7 +24,8 @@ module.exports = function (app) {
       req.session.user_type = detectUserType(req.session.user_agent, req.url, app.get('env'), req.session.src);
       logging.logTrace(req.session, 'new-session');    
     }
-    
+    var ex = helpers.getURLParameter(req.url, "ex");
+    logging.logTrace(req.session, 'page-load', {url: req.url, example: ex});   
     return next();
   });
 }

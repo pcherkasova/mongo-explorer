@@ -47,14 +47,15 @@ We do not want it. That's why the page's name is "_index.html" -->
 	<script type="text/javascript" src="../lib/angular-ui-ace/ui-ace.js"></script>
 	
 
-	<script src="../app/shared/helpers.js?2"></script>
-	<script src="../app/shared/constants.js?2"></script>
-	<script src="../app/shared/errors.js?2"></script>
+	<script src="../app/shared/helpers.js?3"></script>
+	<script src="../app/shared/constants.js?3"></script>
+	<script src="../app/shared/errors.js?3"></script>
 
-	<link rel="stylesheet" href="../css/style.css?2">
-	<script src="../app/app.client.js?2"></script>
-	<script src="../app/controllers/query.ctrl.client.js?2"></script>
-	<script src="../app/controllers/privacy.ctrl.client.js?2"></script>
+	<link rel="stylesheet" href="../css/style.css?3">
+	<script src="../app/app.client.js?3"></script>
+	<script src="../app/directives/confirm-on-exit.dr.client.js?3"></script>
+	<script src="../app/controllers/query.ctrl.client.js?3"></script>
+	<script src="../app/controllers/privacy.ctrl.client.js?3"></script>
 	
 </head>
 <body ng-controller="QueryCtrl as query">
@@ -80,7 +81,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 		<h2>Query your MongoDB online. </h2>
 		<p>We are opensource: <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer">host inhouse, request new features, contribute.</a></p>
 	</div>
-	<form> 
+	<form name="queryForm" confirm-on-exit> 
 		<div class="w3-container" id="conectionHeader">
 			<div class="w3-card-2">
 				<div class="w3-container w3-theme  w3-padding-small">
@@ -89,11 +90,11 @@ We do not want it. That's why the page's name is "_index.html" -->
 				<div class="w3-container w3-theme-light">
 					<input ng-model="query.input.connection.value" style="width:100%; margin-bottom:0" class="w3-code  w3-small" placeholder="connection string"/>
 					<p class="w3-tiny w3-text-red">
-						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_EMPTY">Please, enter connection string.</span>
-						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_FORMAT">Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]".</span>
-						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_TIMED_OUT">The request to the server timed out.</span>
-						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_AUTH">Authentication failed.</span>
-						<span ng-show="query.output.lastError.get() == query.constant.errors.CONN_NO_SERVER">Could not connect to the server.</span>
+						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_EMPTY">Please, enter connection string.</span>
+						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_FORMAT">Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]".</span>
+						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_TIMED_OUT">The request to the server timed out.</span>
+						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_AUTH">Authentication failed.</span>
+						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_NO_SERVER">Could not connect to the server.</span>
 					</p>
 				</div>
 			</div>
@@ -116,7 +117,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 						<br>
 						<p class="w3-tiny w3-text-red">
 							<span ng-show="query.input.collection.value == '' && !query.output.refreshCollectionsProgress && query.output.getWrongControl() == 'connection'">Please, fix the connection string and click "Refresh" again.</span>
-							<span ng-show="query.output.lastError.get() == query.constant.errors.EMPTY_COLLECTION">Please, select collection.</span>
+							<span ng-show="query.output.lastError.get() == query.constants.errors.EMPTY_COLLECTION">Please, select collection.</span>
 						</p>
 						
 						<a class="w3-btn w3-theme w3-small" ng-disabled="query.output.refreshCollectionsProgress" ng-click="query.refreshCollections()">
@@ -131,7 +132,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 				</div>
 			</div>
 			
-			<div class="w3-third ">
+			<div class="w3-third">
 				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
 					<div class="w3-container w3-theme  w3-padding-small">
 						Format
@@ -168,67 +169,90 @@ We do not want it. That's why the page's name is "_index.html" -->
 			</div>
 		</div>
 	
-		<div class="w3-container" id="queryHeader">
-			<br>
-			<div class="w3-card-2 ">
-				<div class="w3-container w3-theme  w3-padding-small">
-					Query
-				</div>
-				<div class="w3-container w3-theme-light">
-					<br>
-					
-					<span class="w3-small" ng-repeat="i in query.input.operation.options">
-						<label class="w3-checkbox">
-						<input type="radio" ng-model="query.input.operation.value" ng-value="i.value" ng-change="query.switchText()">
-						<div class="w3-checkmark"></div> {{i.display}}
-						</label>
-						<a class="w3-text-theme" href="{{i.ref}}" analytics-on="click" analytics-event="{{i.value + '-help'}}" target="_blank"><i class="fa fa-question-circle" ></i></a>
-						&nbsp;&nbsp;&nbsp;&nbsp;
-					</span>
-					
-					<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-right" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runTop">
-						Run
-						<span ng-show="query.output.runQueryProgress" >
-								<i class="fa fa-refresh fa-spin"></i>
-					    </span>
-						
-					</a>
-					<br><br>
-					<div class="w3-border">
-						<div id="aceEditor" ui-ace="{mode:'json'}" ng-model="query.input.query.value"></div>
-						<script>
-							var aceEditor = ace.edit("aceEditor");
-							aceEditor.setHighlightActiveLine(false);
-							aceEditor.$blockScrolling = Infinity;
-						</script>
+	
+	
+		<div class="w3-row-padding w3-margin-top" id="queryHeader">
+			<div class="w3-col s9">
+				<div class="w3-card-2 w3-theme-light" style="min-height:420px">
+					<div class="w3-container w3-theme  w3-padding-small">
+						Query
 					</div>
-					<br>
-					<p class="w3-tiny w3-text-red">
-						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_EMPTY">Please, enter the query. If you want to select all documents, enter empty object: "{}".</span>
-						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_FORMAT">Please, fix the query to be correct JSON.</span>
-						<span ng-show="query.output.lastError.get() == query.constant.errors.QUERY_EXECUTION">Failed to execute the query. {{query.output.lastErrorDetails}}</span>
-					</p>
-					
-					<div class="w3-center">
-						<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runBottom">
+					<div class="w3-container w3-theme-light">
+						<br>
+						
+						<span class="w3-small" ng-repeat="i in query.input.operation.options">
+							<label class="w3-checkbox">
+							<input type="radio" ng-model="query.input.operation.value" ng-value="i.value">
+							<div class="w3-checkmark"></div> {{i.display}}
+							</label>
+							<a class="w3-text-theme" href="{{i.ref}}" analytics-on="click" analytics-event="{{i.value + '-help'}}" target="_blank"><i class="fa fa-question-circle" ></i></a>
+							&nbsp;&nbsp;&nbsp;&nbsp;
+						</span>
+						
+						<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-right" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runTop">
 							Run
 							<span ng-show="query.output.runQueryProgress" >
-								<i class="fa fa-refresh fa-spin"></i>
-					        </span>
+									<i class="fa fa-refresh fa-spin"></i>
+							</span>
+							
 						</a>
-					</div>
-					
-					
-					<br>
-				</div>		
+						<br><br>
+						
+						
+						<div class="w3-border">
+							<div id="aceEditor" ui-ace="{mode:'json'}" ng-model="query.input.query.value"></div>
+							<script>
+								var aceEditor = ace.edit("aceEditor");
+								aceEditor.setHighlightActiveLine(false);
+								aceEditor.$blockScrolling = Infinity;
+							</script>
+						</div>
+						<br>
+						<p class="w3-tiny w3-text-red">
+							<span ng-show="query.output.lastError.get() == query.constants.errors.QUERY_EMPTY">Please, enter the query. If you want to select all documents, enter empty object: "{}".</span>
+							<span ng-show="query.output.lastError.get() == query.constants.errors.QUERY_FORMAT">Please, fix the query to be correct JSON.</span>
+							<span ng-show="query.output.lastError.get() == query.constants.errors.QUERY_EXECUTION">Failed to execute the query. {{query.output.lastErrorDetails}}</span>
+						</p>
+						
+						<div class="w3-center">
+							<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runBottom">
+								Run
+								<span ng-show="query.output.runQueryProgress" >
+									<i class="fa fa-refresh fa-spin"></i>
+								</span>
+							</a>
+						</div>
+						<br>
+					</div>		
+				</div>
 			</div>
+			
+			<div class="w3-col s3 ">
+				<div class="w3-card-2 w3-theme-light " style="min-height:420px">
+					<div class="w3-container w3-theme  w3-padding-small">
+						Examples
+					</div>
+					<div class="w3-container w3-small w3-text-theme">
+						<br>
+						<div ng-repeat="i in query.constants.queryExamples" >
+							<p><a ng-click="query.openExample($index)" href="">
+								{{i.name}}</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>s
+			
+			
+			
+			
 		</div>
 	</form>
 				
 	<div class="w3-container">
 		<br>
 		<div class="w3-card-2">
-			<div ng-bind="query.constant.resultHeader"  id="resultHeader" class="w3-container w3-theme  w3-padding-small">
+			<div ng-bind="query.constants.resultHeader"  id="resultHeader" class="w3-container w3-theme  w3-padding-small">
 				Result
 			</div>
 			<div class="w3-padding-small" id="result" style="min-height:20px; overflow: auto; ">

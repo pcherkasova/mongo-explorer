@@ -6,9 +6,9 @@
 
 	app.controller('QueryCtrl', ["$timeout",  "$http", '$document', '$compile', '$scope', function ($timeout, $http, $document, $compile, $scope) {
 		
-		window.onbeforeunload = function (e) {
-			return "";      
-		};
+		// window.onbeforeunload = function (e) {
+		// 	return "";      
+		// };
 		
 		
 		// form validation
@@ -116,18 +116,20 @@
 				);
 		}	
 
-		this.switchText = function () {
-			
-			// remember current text to the tab
-			this.input.query.tabs[this.input.operation.prevValue] = this.input.query.value;
-			
-			// change current text to remembered one
-			this.input.query.value = this.input.query.tabs[this.input.operation.value];
-			
-			// switch prev value
-			this.input.operation.prevValue = this.input.operation.value;
+		this.openExample = function(exNumber){
+			var path = window.location.protocol + "//" + window.location.host + '?ex='+exNumber;
+			var win = window.open(path, '_blank');
+  			win.focus();
 		}
 		
+		this.applyExample = function(){
+			var ex = window.$helpers.getURLParameter(window.location.search, "ex");
+			if (ex){
+				this.input.operation.value = this.constants.queryExamples[ex].operation;
+				this.input.query.value = this.constants.queryExamples[ex].query;
+				
+			}			
+		}
 		
 		this.setUnexpectedClientError = function (description) {
 			this.output.lastError.set(this.errors.ERR.CLIENT_UNEXPECTED);
@@ -202,12 +204,7 @@
 			},
 			
 			query: 	{
-				value: window.$constants.FIND_QUERY,
-
-				tabs: {
-					"aggr":window.$constants.AGGREGATE_QUERY,
-					"find":window.$constants.FIND_QUERY
-				}
+				value: '{}'
 			},
 			
 			format:{
@@ -229,8 +226,8 @@
 				options: [
 					{ value: "find", display: "Find", ref: "http://docs.mongodb.org/manual/reference/method/db.collection.find/"},
 					{ value: "aggr", display: "Aggregate", ref: "http://docs.mongodb.org/manual/reference/method/db.collection.aggregate/" }],
-				value: "find",
-				prevValue: "find"
+				value: "find"
+				
 			},
 			
 			
@@ -275,12 +272,15 @@
 			
 		}
 		
-		this.constant = {
+		this.constants = {
 			resultHeader: "Result (top " + window.$constants.ROW_LIMIT + " documents)",
+			queryExamples: window.$constants.queryExamples,
 			errors: window.$errors.ERR.MONGO
 		}
 
+		
 		this.refreshCollections(); 
+		this.applyExample();
 
   }]);
     
