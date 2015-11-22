@@ -36,7 +36,7 @@ exports.queryExamples = [
 		'}\n'
 	},
 	{
-		name: "Project and sort. Order standars zip codes by population and show only important fields",
+		name: "Project and sort. Order standard zip codes by population and show only important fields",
 		operation: "find",
 		query: '{\n' +
 		'    "query": {"type": "STANDARD"},\n' +
