@@ -20,7 +20,7 @@ exports.queryExamples = [
 		query: '{}'
 	},
 	{
-		name: "Count zip codes by type.",
+		name: "Aggregate. Count zip codes by type.",
 		operation: "aggr",
 		query: '[\n' +
 		'    {"$match": { } },\n' +
@@ -29,14 +29,14 @@ exports.queryExamples = [
 		']\n'
 	},
 	{
-		name: "List only standard zip codes.",
+		name: "Filter. List only standard zip codes.",
 		operation: "find",
 		query: '{\n' +
 		'    "query": {"type": "STANDARD"}\n' +
 		'}\n'
 	},
 	{
-		name: "Order standars zip codes by population and show only important fields",
+		name: "Project and sort. Order standars zip codes by population and show only important fields",
 		operation: "find",
 		query: '{\n' +
 		'    "query": {"type": "STANDARD"},\n' +
@@ -45,7 +45,7 @@ exports.queryExamples = [
 		'}\n'
 	},
 	{
-		name: "Count zip codes by states.",
+		name: "Fileter, aggregate and sort. Count zip codes by states.",
 		operation: "aggr",
 		query: '[\n' +
 		'    {"$match": { "type": "STANDARD" } },\n' +
@@ -54,7 +54,7 @@ exports.queryExamples = [
 		']\n'
 	},
 	{
-		name: "Averege population per zip by state.",
+		name: "Fileter, aggregate and sort. Averege population per zip by state.",
 		operation: "aggr",
 		query: '[\n' +
 		'    {"$match": { "type": "STANDARD" } },\n' +
