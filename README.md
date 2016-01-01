@@ -16,7 +16,7 @@ Mongo-exploprer is written in [nodejs](https://nodejs.org/en/), uses [mongodb](h
 
   APP_SESSION_SECRET - any string
   
-  APP_TELEMETRY_DB - connection string to a DB in Mango engine
+  APP_TELEMETRY_DB - connection string to a DB in Mongo engine
 
 3. Run commands:
 
