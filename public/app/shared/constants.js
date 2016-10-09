@@ -45,7 +45,7 @@ exports.queryExamples = [
 		'}\n'
 	},
 	{
-		name: "Fileter, aggregate and sort. Count zip codes by states.",
+		name: "Filter, aggregate and sort. Count zip codes by states.",
 		operation: "aggr",
 		query: '[\n' +
 		'    {"$match": { "type": "STANDARD" } },\n' +
@@ -54,7 +54,7 @@ exports.queryExamples = [
 		']\n'
 	},
 	{
-		name: "Fileter, aggregate and sort. Averege population per zip by state.",
+		name: "Filter, aggregate and sort. Averege population per zip by state.",
 		operation: "aggr",
 		query: '[\n' +
 		'    {"$match": { "type": "STANDARD" } },\n' +
