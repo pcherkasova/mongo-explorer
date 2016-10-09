@@ -4,6 +4,6 @@ cd ../../
 pwd
 git add -A
 git commit -m "minor fixes"
-git push github master
+git push origin master
 
 
