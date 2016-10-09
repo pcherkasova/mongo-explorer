@@ -3,7 +3,7 @@ cd $mydir
 cd ../../
 pwd
 git add -A
-git commit -m "provided examples for different queries"
+git commit -m "minor fixes"
 git push github master
 
 
