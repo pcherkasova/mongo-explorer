@@ -1,4 +1,4 @@
-<!-- the name "index.html" is hardcoded and specially processed in express. 
+<!-- The name "index.html" is hardcoded and specially processed in express. 
 We do not want it. That's why the page's name is "_index.html" -->
 <!doctype html>
 <html lang="en" ng-app="app" > 
@@ -27,39 +27,36 @@ We do not want it. That's why the page's name is "_index.html" -->
 	<meta name="msapplication-TileImage" content="../icon/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
 	
-	
-	
-	
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
 	<link rel="stylesheet" href="../lib-no-bower/w3css/w3.css">
 	<link rel="stylesheet" href="../lib-no-bower/w3css/w3-theme-teal.css">
-	
-	
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="../lib/angular/angular.js"></script>
+    <script src="../lib/angular-cookies/angular-cookies.js"></script>
+
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.4.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.7.3/angular-scroll.min.js"></script>
 	
 	<script type="text/javascript" src="../lib/ace-builds/src-min-noconflict/ace.js"></script>
-	
 	<script type="text/javascript" src="../lib/angular-ui-ace/ui-ace.js"></script>
 	
-
 	<script src="../app/shared/helpers.js?3"></script>
 	<script src="../app/shared/constants.js?3"></script>
 	<script src="../app/shared/errors.js?3"></script>
 
 	<link rel="stylesheet" href="../css/style.css?3">
-	<script src="../app/app.client.js?3"></script>
-	<script src="../app/directives/confirm-on-exit.dr.client.js?3"></script>
-	<script src="../app/controllers/query.ctrl.client.js?3"></script>
-	<script src="../app/controllers/privacy.ctrl.client.js?3"></script>
-	
+	<script src="../app/app.js?3"></script>
+	<script src="../app/controllers/index.js?3"></script>
+	<script src="../app/directives/tab.js?3"></script>
+	<script src="../app/components/connect.js?3"></script>
+	<script src="../app/components/queries.js?3"></script>
 </head>
-<body ng-controller="QueryCtrl as query">
-	<header class=" w3-theme">
+<body>
+	<header class="w3-theme">
 		<div class="w3-row">
 			<div class="w3-container w3-half">
 				<h1>Mongo-Explorer</h1>
@@ -81,246 +78,44 @@ We do not want it. That's why the page's name is "_index.html" -->
 		<h2>Query your MongoDB online. </h2>
 		<p>We are opensource: <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer">host inhouse, request new features and contribute.</a></p>
 	</div>
-	<form name="queryForm" confirm-on-exit> 
-		<div class="w3-container" id="conectionHeader">
-			<div class="w3-card-2">
-				<div class="w3-container w3-theme  w3-padding-small">
-					Put your connection string here:
-				</div>
-				<div class="w3-container w3-theme-light">
-					<input ng-model="query.input.connection.value" style="width:100%; margin-bottom:0" class="w3-code  w3-small" placeholder="connection string"/>
-					<a href="https://mongolab.com/" target="_blank" class="w3-right w3-text-theme w3-small">Create your MongoDB in cloud.</a>
-					<p class="w3-tiny w3-text-red">
-						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_EMPTY">Please, enter connection string.</span>
-						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_FORMAT">Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]".</span>
-						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_TIMED_OUT">The request to the server timed out.</span>
-						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_AUTH">Authentication failed.</span>
-						<span ng-show="query.output.lastError.get() == query.constants.errors.CONN_NO_SERVER">Could not connect to the server.</span>
-					</p>
-				</div>
+	
+	<div ng-controller="MainCtrl as main">
+		<my-connect shared="main.shared"></my-connect>
+        <div ng-controller="TabCtrl as tab" ng-show='main.shared.db.inventory'>
+            <ul class="w3-navbar w3-light-grey w3-center">
+				<li class='w3-half' ><a href="#" ng-click="tab.select(0)" ng-class="{'w3-theme': tab.isSelected(0)}">Queries</a></li>
+				<li class= 'w3-half' ><a href="#" ng-click="tab.select(1)" ng-class="{'w3-theme': tab.isSelected(1)}">Dashboards</a></li>
+			</ul>
+			<div ng-show="tab.isSelected(0)">
+				<br>
+				<my-queries shared="main.shared"></my-queries>
 			</div>
+			<div ng-show="tab.isSelected(1)">
+				Dashboards
+			</div>
+
 		</div>
 
-	
-		<div class="w3-row-padding w3-margin-top" id="collectionHeader">
-			<div class="w3-third">
-				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
-					<div class="w3-container w3-theme  w3-padding-small">
-						Collection
-					</div>
-					<div class="w3-container  w3-small">
-						<br>
-						<select 
-							ng-options="c.name as (c.name + ' (' + c.count + ')') for c in query.input.collection.options"
-							ng-model="query.input.collection.value" 
-							class="w3-select w3-white" >
-						</select>
-						<br>
-						<p class="w3-tiny w3-text-red">
-							<span ng-show="query.input.collection.value == '' && !query.output.refreshCollectionsProgress && query.output.getWrongControl() == 'connection'">Please, fix the connection string and click "Refresh" again.</span>
-							<span ng-show="query.output.lastError.get() == query.constants.errors.EMPTY_COLLECTION">Please, select collection.</span>
-						</p>
-						
-						<a class="w3-btn w3-theme w3-small" ng-disabled="query.output.refreshCollectionsProgress" ng-click="query.refreshCollections()">
-							Refresh
-							<span ng-show="query.output.refreshCollectionsProgress" >
-								<i class="fa fa-refresh fa-spin"></i>
-					    	</span>
-						</a>
-						<br>
-						<br>
-					</div>
-				</div>
-			</div>
-			
-			<div class="w3-third">
-				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
-					<div class="w3-container w3-theme  w3-padding-small">
-						Format
-					</div>
-					<div class="w3-container w3-small">
-						<br>
-						<div  ng-repeat="i in query.input.format.options">	
-							<label class="w3-checkbox ">
-								<input type="radio" ng-model="query.input.format.value" ng-value="i.value">
-								<div class="w3-checkmark"></div> {{i.display}}
-							</label>
-							<br/>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="w3-third ">
-				<div class="w3-card-2 w3-theme-light " style="min-height:180px">
-					<div class="w3-container w3-theme  w3-padding-small">
-						Delivery
-					</div>
-					<div class="w3-container w3-small">
-						<br>
-						<div  ng-repeat="i in query.input.delivery.options">	
-							<label class="w3-checkbox">
-								<input type="radio" ng-model="query.input.delivery.value" ng-value="i.value">
-								<div class="w3-checkmark"></div> {{i.display}}
-							</label>
-							<br/>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	
-	
-	
-		<div class="w3-row-padding w3-margin-top" id="queryHeader">
-			<div class="w3-col s9">
-				<div class="w3-card-2 w3-theme-light" style="min-height:420px">
-					<div class="w3-container w3-theme  w3-padding-small">
-						Query
-					</div>
-					<div class="w3-container w3-theme-light">
-						<br>
-						
-						<span class="w3-small" ng-repeat="i in query.input.operation.options">
-							<label class="w3-checkbox">
-							<input type="radio" ng-model="query.input.operation.value" ng-value="i.value">
-							<div class="w3-checkmark"></div> {{i.display}}
-							</label>
-							<a class="w3-text-theme" href="{{i.ref}}" analytics-on="click" analytics-event="{{i.value + '-help'}}" target="_blank"><i class="fa fa-question-circle" ></i></a>
-							&nbsp;&nbsp;&nbsp;&nbsp;
-						</span>
-						
-						<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge w3-right" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runTop">
-							Run
-							<span ng-show="query.output.runQueryProgress" >
-									<i class="fa fa-refresh fa-spin"></i>
-							</span>
-							
-						</a>
-						<br><br>
-						
-						
-						<div class="w3-border">
-							<div id="aceEditor" ui-ace="{mode:'json'}" ng-model="query.input.query.value"></div>
-							<script>
-								var aceEditor = ace.edit("aceEditor");
-								aceEditor.setHighlightActiveLine(false);
-								aceEditor.$blockScrolling = Infinity;
-							</script>
-						</div>
-						<br>
-						<p class="w3-tiny w3-text-red">
-							<span ng-show="query.output.lastError.get() == query.constants.errors.QUERY_EMPTY">Please, enter the query. If you want to select all documents, enter empty object: "{}".</span>
-							<span ng-show="query.output.lastError.get() == query.constants.errors.QUERY_FORMAT">Please, fix the query to be correct JSON.</span>
-							<span ng-show="query.output.lastError.get() == query.constants.errors.QUERY_EXECUTION">Failed to execute the query. {{query.output.lastErrorDetails}}</span>
-						</p>
-						
-						<div class="w3-center">
-							<a style="width:200px;"class="w3-btn w3-theme w3-large w3-badge" ng-disabled="query.output.runQueryProgress" ng-click="query.runQuery()" id="runBottom">
-								Run
-								<span ng-show="query.output.runQueryProgress" >
-									<i class="fa fa-refresh fa-spin"></i>
-								</span>
-							</a>
-						</div>
-						<br>
-					</div>		
-				</div>
-			</div>
-			
-			<div class="w3-col s3 ">
-				<div class="w3-card-2 w3-theme-light " style="min-height:420px">
-					<div class="w3-container w3-theme  w3-padding-small">
-						Examples
-					</div>
-					<div class="w3-container w3-small w3-text-theme">
-						<br>
-						<div ng-repeat="i in query.constants.queryExamples" >
-							<p><a ng-click="query.openExample($index)" href="">
-								{{i.name}}</a>
-							</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
-				
-	<div class="w3-container">
+
+
 		<br>
-		<div class="w3-card-2">
-			<div ng-bind="query.constants.resultHeader"  id="resultHeader" class="w3-container w3-theme  w3-padding-small">
-				Result
-			</div>
-			<div class="w3-padding-small" id="result" style="min-height:20px; overflow: auto; ">
-				<!-- innerHTML to generate html table -->
-			</div>		
-		</div>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+{{main.shared}}
 	</div>
-				
-	<br>
-					
-	
-	
-	<div ng-controller="PrivacyPolicyCtrl as privacy">		
-		<footer class="w3-container w3-theme">
-			<div class="w3-row">
-				
-				<div class="w3-half">
-					<div class="w3-topnav">
-						<a class="w3-theme" ng-click="privacy.open('lg')" href="">Privacy Policy</a>
-						<a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer">GitHub</a>
-					</div>
-				</div>
-				<div class="w3-half">
-					<p>Thank you for using Mongo-Explorer! Your <a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">feedback and contributions</a> are very welcome. </p>
-				</div>
-			</div>
-		</footer>
-		
-	
-	
-		<script type="text/ng-template" id="privacyPolicyContent.html">
-			<div class="modal-header">
-				<a class="w3-btn w3-theme w3-small w3-right" ng-click="modalInstance.ok()">Close</a>
-				<h3 class="modal-title">Privacy Policy</h3>
-			</div>
-			<div class="modal-body">
-				<div style="overflow:scroll; height:400px;">
-					<p><em>All about cookies <a href="#cookies">here</a>.</em></p>
-					<p>We are committed to protecting your privacy. We will only use the information that we collect about you lawfully (in accordance with the relevant Data Protection Acts).</p>
-					<p>We collect information about you for 2 reasons: firstly, to process payments and second, to provide you with the best possible service.</p>
-					<p>We will not e-mail you in the future unless you have given us your consent, either explicitly, or by opting in to one of our email lists.</p>
-					<p>We will give you the chance to refuse (or unsubscribe from) any marketing email from us in the future.</p>
-					<p>We will never collect sensitive information about you without your explicit consent.</p>
-					<p>The information we hold will be accurate and up to date. You can check the information that we hold about you by emailing us. If you find any inaccuracies we will delete or correct it promptly.</p>
-					<p>The personal information which we hold will be held securely in accordance with our internal security policy and the law.</p>
-					<p>If we intend to transfer your information outside the EEA (European Economic Area) we will always obtain your consent first.</p>
-					<h1><a name="cookies"></a></h1>
-					<hr />
-					<p><strong>Cookies</strong></p>
-					<p>Cookies are small digital signature files that are stored by your web browser that allow your preferences to be recorded when visiting the website.  Also they may be used to track your return visits to the website. No personally identifiable information is stored by Mongo-Explorer. Third party advertising companies may also use cookies for tracking purposes.</p>
-					<p>You can browse websites with cookies switched off (and/or block third party cookies) by adjusting your web browser settings or preferences, however if you do so then our site may not function properly for you. You can also use your web browser’s settings or preferences to remove your cookies at any time, and some browsers will also have a setting that will enable them to be automatically deleted when you close it.</p>
-					
-					<p>&nbsp;</p>
-					<h2><strong>Links to other websites:</strong></h2>
-					<p>Our website may contain links to enable you to visit other websites of interest easily. However, once you have used these links to leave our site, you should note that we do not have any control over that other website. Therefore, we cannot be responsible for the protection and privacy of any information which you provide whilst visiting such sites and such sites are not governed by this privacy statement. You should exercise caution and look at the privacy statement applicable to the website in question.</p>
-					<p style="text-align: center;">&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;</p>
-					<p>If you have any questions/comments about privacy, you should <a href="https://github.com/pcherkasova/mongo-explorer/issues" target="_blank">contact us</a>.</p>
-				</div>
 
-			</div>
-			<div class="modal-footer">
-				<a class="w3-btn w3-theme w3-small w3-right" ng-click="modalInstance.ok()">Close</a>
+
 				
-			</div>
-		</script>
-	
-		
-	</div>
-  
 	
 
+	
 
 </body>
 </html>

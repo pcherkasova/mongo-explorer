@@ -7,7 +7,7 @@ The user inrterface is designed to be self-descriptive. If it is not, please, cr
 
 
 #Technologies
-Mongo-exploprer is written in [nodejs](https://nodejs.org/en/), uses [mongodb](https://www.mongodb.com/) to store data and [angularjs](https://angularjs.org/) to interact with user. 
+Mongo-exploprer stays on [nodejs](https://nodejs.org/en/), [mongodb](https://www.mongodb.com/) and [angularjs](https://angularjs.org/). 
 
 
 #How to Host
@@ -16,7 +16,7 @@ Mongo-exploprer is written in [nodejs](https://nodejs.org/en/), uses [mongodb](h
 
   APP_SESSION_SECRET - any string
   
-  APP_TELEMETRY_DB - connection string to a DB in Mongo engine
+  APP_TELEMETRY_DB - connection string to a Mongo DB, with write permissions
 
 3. Run commands:
 
@@ -26,8 +26,11 @@ Mongo-exploprer is written in [nodejs](https://nodejs.org/en/), uses [mongodb](h
 
 
 #How to Run Tests
-1. Set environment variables like for hosting
-2. Run node test.js
+1. Set environment variables like for hosting plus:
+
+  APP_TEST_DB - connection string to a Mongo DB, with write permissions
+
+2. Run 'node test.js'
 
 
 

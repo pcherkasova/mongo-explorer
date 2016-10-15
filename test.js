@@ -1,23 +1,22 @@
 "use strict";
 
-var test_explorer = require("./tools/test/test.query.js"); 
-var test_logging = require("./tools/test/test.logging.js"); 
-var test_hash = require("./tools/test/test.hash.js"); 
 var Q = require("q");
 
-var tests = [];
-tests = tests.concat(test_explorer.tests);
-tests = tests.concat(test_logging.tests);
-tests = tests.concat(test_hash.tests);
+var tests = []
+    .concat(require("./tools/test/test.query.js").tests)
+    // .concat(require("./tools/test/test.logging.js").tests)
+    // .concat(require("./tools/test/test.hash.js").tests)
+	;
 
 for (var i in tests) {
 	tests[i] = tests[i]();
 }
 
-Q.all(tests	
+var q = Q.all(tests	
  ).then(function (values) {
 	console.log(values.length + " tests passed.");
-}).catch(function (err) {
+}).fail(function (err) {
 	throw err;
 }).done();
 
+console.log(q.inspect().state);

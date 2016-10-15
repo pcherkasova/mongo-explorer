@@ -17,7 +17,6 @@ function getDocTemplate(session, name, details, event_type){
 		time: (new Date()).toISOString(),
 		details: details
 	};
-	
 }
 
 exports.logUserEvent = function (session, name, step, details) {
@@ -27,18 +26,18 @@ exports.logUserEvent = function (session, name, step, details) {
 		telemetryConnection,
 		collection,
 		doc		
-	)
+	).done(); 
 }
 
 exports.logError = function (session, err, details) {
-	var doc = getDocTemplate(session, err.name, details, 'error');
-	doc.message = err.message;
+	var doc = getDocTemplate(session, err.name, err.message, 'error');
 	doc.stack = (err.stack) ?  err.stack:  (new Error(err)).stack;
+	// console.log(doc);
 	return db_operations.insert(
 		telemetryConnection,
 		collection,
 		doc
-	)
+	).done(); 
 }
 
 exports.logTrace = function (session, name, details) {
@@ -47,6 +46,6 @@ exports.logTrace = function (session, name, details) {
 		telemetryConnection,
 		collection,
 		doc
-	)
+	).done(); 
 }
 

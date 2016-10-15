@@ -1,9 +1,8 @@
 "use strict";
 
-/// we want this module to be available both in browser client and nodejs server
+/// We want this module to be available both in browser client and nodejs server.
 if (typeof Window != "undefined"){
 	var exports = this.$constants = {};
-	
 }
 	
 

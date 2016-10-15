@@ -12,7 +12,7 @@ Number.prototype.format = function(decimalPlaces){
 
 String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
 
-Boolean.prototype.toFriendlyString = function(){
+Boolean.prototype.toYesNo = function(){
     if (this == true)
         return "yes";
     else
@@ -36,19 +36,9 @@ Date.prototype.toLocalSortableString = function() {
 	return res;
 };
 
-
-
-
 exports.getURLParameter = function(url, param) {
     return decodeURIComponent((new RegExp('[?|&]' + param + '=' + '([^&;]+?)(&|#|;|$)').exec(url) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
-
-
-exports.isValidJSON = function(json) {
-
-}
-
-
 
 exports.objectToHTMLTable = function(obj){
 
@@ -75,7 +65,6 @@ exports.objectToHTMLTable = function(obj){
     
 }
 
-
 exports.buildHTMLTable = function(header, rows, getCellCallback){
 
     var res = "<table><tr>";
@@ -97,10 +86,9 @@ exports.buildHTMLTable = function(header, rows, getCellCallback){
     
 }
 
-
 // converts multi-layer object to one-layer object
 // we are assuming that object is not recursive since it is created from json
-exports.pressObject = function (obj) {
+exports.objectToPlainObject = function (obj) {
     var result = {};
     
     // renames field if a field with such name alrady exist
@@ -153,7 +141,7 @@ exports.arrayToCSV = function (array, lineSeparator) {
     
     for (var i in array) {
         
-        var obj = this.pressObject(array[i]);
+        var obj = this.objectToPlainObject(array[i]);
         var rowStart = true;
         
         // write all known fields
@@ -185,13 +173,6 @@ exports.arrayToCSV = function (array, lineSeparator) {
     return header + lineSeparator + data;
 }
 
-
-
-exports.DataWithComments = function (data, comments) {
-    this.data = data;
-    this.warmings = comments;
-}
-
 exports.arrayToHTMLTable = function (array, className, maxColNum) {
     function escapeForHTML(cell_value) {
         var result = cell_value
@@ -213,7 +194,7 @@ exports.arrayToHTMLTable = function (array, className, maxColNum) {
     
     for (var i in array) {
         
-        var obj = this.pressObject(array[i]);
+        var obj = this.objectToPlainObject(array[i]);
         
         data += "<tr>";
         
@@ -262,18 +243,6 @@ exports.arrayToHTMLTable = function (array, className, maxColNum) {
     
     return "<table class='" + className + "'><tr>" +  header + "</tr>" + data + "</table>";
 }
-
-/*
-exports.arrayToHTMLOptions = function(array, getValue, getText){
-
-    var res = "";
-    for (var item in array) {
-        res += "<option value='" + getValue(array[item]) + "'>" + getText(array[item])  + "</option>";
-    }
-    return res;
-    
-}
-*/
 
 exports.download = function(filename, text) {
     var pom = document.createElement('a');

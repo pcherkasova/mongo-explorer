@@ -1,7 +1,9 @@
 {
   "name": "mongo-explorer",
   "dependencies": {
-      "angular-ui-ace": "0.2.3"  
+      "angular-ui-ace": "0.2.3",
+      "angular-cookies": "1.5.8"
+      
     
   }
 }
