@@ -73,8 +73,7 @@
         }
         
         this.shared.db = {};
-        this.shared.db.connectionString = this.shared.demoDB;
-
+        
         if (this.myDB) this.setMy()
         else this.setDemo();
         
