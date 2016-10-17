@@ -1,12 +1,13 @@
 a {
 	text-decoration: underline ;
-	
 }
 
 label {
-	font-weight: normal ; 
-	
+	font-weight: normal;
+	margin-bottom: 0px;
 }
 
 
-.ace_editor { height: 200px; }
+.ace_editor { 
+	height: 200px; 
+}

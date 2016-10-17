@@ -1,49 +1,45 @@
-
 <div class='w3-row-padding'>
     <div class='w3-col w3-quarter'>
         <ul class="w3-ul w3-card-4 w3-hoverable">
             <li 
                 ng-repeat="query in $ctrl.shared.db.inventory.queries | orderBy: query.name"
-                ng-class="{'w3-theme': $index == $ctrl.shared.selectedQuery}"]
-                ng-click="$ctrl.shared.selectedQuery = $index" 
+                ng-class="{'w3-theme': $index == $ctrl.shared.db.selectedQueryIndex}"]
+                ng-click="$ctrl.shared.selectQuery($index)" 
                 >
                 {{query.name}}
                 <span 
                     ng-click="$ctrl.deleteQuery($index)" 
                     class="w3-closebtn w3-margin-right w3-medium"
+                    ng-class="{'w3-disabled': $ctrl.shared.isProgress()}"
                     >
                     &times;
                 </span>
             </li>
         </ul>
         <br>
-        <a class="w3-btn w3-theme w3-card-4"  ng-click="$ctrl.addQuery()" style="width:100%">+</a>
-    </div>
-    <div class='w3-col w3-threequarter'>
+        <a class="w3-btn w3-theme w3-card-4" ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" ng-click="$ctrl.addQuery()" style="width:100%">+</a>
+        <br>        
+        <br>
         <a class="w3-btn w3-theme w3-card-4"  ng-show='$ctrl.shared.db.modified' ng-click="$ctrl.save()" style="width:100%">
-            Save queries to the collection 'mongo-explorer.com'
-            <span ng-show="$ctrl.saveProgress">
+            Save to collection <br> 'mongo-explorer.com'
+            <span ng-show="$ctrl.shared.saveProgress">
                 <i class="fa fa-refresh fa-spin"></i>
             </span>
         </a>
     </div>
+    <div class='w3-col w3-threequarter'>
+        <my-query shared="$ctrl.shared"></my-query>
+        
+    </div>
 </div>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-Queries state: {{$ctrl}}
+<div class='w3-container'>
+    <div class='w3-card-4' ng-show="$ctrl.shared.showResult">
+        <div id="resultHeader" class="w3-theme w3-padding-small">
+            Result
+        </div>
+        <div class="" id="result" style="min-height:20px; overflow: auto; ">
+            <!-- we use innerHTML to show result -->
+        </div>
+    </div>
+    <br>
+</div>

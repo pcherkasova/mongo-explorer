@@ -4,50 +4,52 @@
 	var app = angular.module('app');
 
     function controller($scope, $http) {
-
         this.deleteQuery = function(index) {
             if (!window.confirm('Do you really want to delete the query "' 
             + this.shared.db.inventory.queries[index].name + '"?')) return;
             
             this.shared.db.inventory.queries.splice(index, 1);
-            this.shared.selectedQuery = Math.min(this.shared.db.inventory.queries.length - 1, this.shared.selectedQuery);
+            this.shared.selectQuery(Math.min(this.shared.db.inventory.queries.length - 1, this.shared.db.selectedQueryIndex));
             this.shared.db.modified = true;
         };
 
         this.addQuery = function() {
-            this.shared.db.inventory.queries.push({name: 'New Query', code: ''});
-            this.shared.selectedQuery = Math.max(0, this.shared.selectedQuery);
+            this.shared.db.inventory.queries.push(
+                {
+                    name: 'New Query', 
+                    code: '{}', 
+                    operation: 'find',
+                    collection: this.shared.db.inventory.collections[0].name
+                }
+            );
+            this.shared.selectQuery(Math.max(0, this.shared.db.selectedQueryIndex));
             this.shared.db.modified = true;
         };
 
         this.save = function() {
             var scope = this;
             
-            var queries = new Array(this.shared.db.inventory.queries.length);
+            var queries = JSON.parse(JSON.stringify(this.shared.db.inventory.queries));
             
-            for (var i = 0; i < queries.length; i++) {
-                queries[i] = {
-                    name: this.shared.db.inventory.queries[i].name,
-                    code: this.shared.db.inventory.queries[i].code,
-                    dashboards: this.shared.db.inventory.queries[i].dashboards
-                }
+            for (var i in queries) {
+                delete queries[i]["_id"];
+                delete queries[i]["$$hashKey"];
             }
                        
             function couldNotSave() {
-                console.log(JSON.stringify(queries, null, 4));
-                alert("Not enough permissions to save queries to the database.\n" +
+                alert("Could not write to the database.\n" +
                       "You may want to update the collection 'mongo-explorer.com' manually:\n" +
                       JSON.stringify(queries, null, 4)
                 );
             }
 
-            scope.saveProgress = true;
+            scope.shared.saveProgress = true;
 			scope.error = 0;
 
             $http({url: "../api/saveQueries", method: "GET", params: { conn: scope.shared.db.connectionString, queries: JSON.stringify(queries) }})
             .then(
 				function (response) {
-                    scope.saveProgress = false;
+                    scope.shared.saveProgress = false;
 
 					if (response.data.res) {
                         if (response.data.res ) scope.shared.db.modified = false
@@ -59,7 +61,7 @@
                     };
 				}, 
 				function (err) {
-                    scope.saveProgress = false;
+                    scope.shared.saveProgress = false;
                     couldNotSave();
 				}
 			);

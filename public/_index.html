@@ -1,14 +1,15 @@
 <!-- The name "index.html" is hardcoded and specially processed in express. 
 We do not want it. That's why the page's name is "_index.html" -->
 <!doctype html>
-<html lang="en" ng-app="app" > 
+<html lang="en" ng-app="app">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="description" content="Query your MongoDB online without local installations." />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<base href="/">
 	<title>MongoDB Online Data Explorer</title>
-	
+
 	<link rel="apple-touch-icon" sizes="57x57" href="../icon/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="../icon/apple-icon-60x60.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="../icon/apple-icon-72x72.png">
@@ -18,7 +19,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 	<link rel="apple-touch-icon" sizes="144x144" href="../icon/apple-icon-144x144.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="../icon/apple-icon-152x152.png">
 	<link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-icon-180x180.png">
-	<link rel="icon" type="image/png" sizes="192x192"  href="../icon/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="192x192" href="../icon/android-icon-192x192.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="../icon/favicon-32x32.png">
 	<link rel="icon" type="image/png" sizes="96x96" href="../icon/favicon-96x96.png">
 	<link rel="icon" type="image/png" sizes="16x16" href="../icon/favicon-16x16.png">
@@ -26,7 +27,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 	<meta name="msapplication-TileColor" content="#ffffff">
 	<meta name="msapplication-TileImage" content="../icon/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
-	
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -35,27 +36,30 @@ We do not want it. That's why the page's name is "_index.html" -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script type="text/javascript" src="../lib/angular/angular.js"></script>
-    <script src="../lib/angular-cookies/angular-cookies.js"></script>
+	<script src="../lib/angular-cookies/angular-cookies.js"></script>
 
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.4.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-animate.js"></script>
+	<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.4.js"></script>
 	<script src="//cdnjs.cloudflare.com/ajax/libs/angular-scroll/0.7.3/angular-scroll.min.js"></script>
-	
+
 	<script type="text/javascript" src="../lib/ace-builds/src-min-noconflict/ace.js"></script>
 	<script type="text/javascript" src="../lib/angular-ui-ace/ui-ace.js"></script>
-	
-	<script src="../app/shared/helpers.js?3"></script>
-	<script src="../app/shared/constants.js?3"></script>
-	<script src="../app/shared/errors.js?3"></script>
 
-	<link rel="stylesheet" href="../css/style.css?3">
-	<script src="../app/app.js?3"></script>
-	<script src="../app/controllers/index.js?3"></script>
-	<script src="../app/directives/tab.js?3"></script>
-	<script src="../app/components/connect.js?3"></script>
-	<script src="../app/components/queries.js?3"></script>
+	<script src="../app/shared/helpers.js?4"></script>
+	<script src="../app/shared/constants.js?4"></script>
+	<script src="../app/shared/errors.js?4"></script>
+
+	<link rel="stylesheet" href="../css/style.css?4">
+	<script src="../app/app.js?4"></script>
+	<script src="../app/controllers/index.js?4"></script>
+	<script src="../app/controllers/privacy.js?4"></script>
+	<script src="../app/directives/tab.js?4"></script>
+	<script src="../app/components/connect.js?4"></script>
+	<script src="../app/components/queries.js?4"></script>
+	<script src="../app/components/query.js?4"></script>
 </head>
-<body>
+
+<body class='w3-text-theme'>
 	<header class="w3-theme">
 		<div class="w3-row">
 			<div class="w3-container w3-half">
@@ -64,7 +68,7 @@ We do not want it. That's why the page's name is "_index.html" -->
 			<div class="w3-half">
 				<div class="w3-large  w3-right">
 					<a href='https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=www.mongo-explorer.com' target='_blank'>
-						<img src='https://www.expeditedssl.com/ssl-secure-badge.png'  alt='Expedited SSL Scanner'>
+						<img src='https://www.expeditedssl.com/ssl-secure-badge.png' alt='Expedited SSL Scanner'>
 					</a>
 				</div>
 				<div class="w3-topnav w3-large  w3-right">
@@ -74,48 +78,53 @@ We do not want it. That's why the page's name is "_index.html" -->
 			</div>
 		</div>
 	</header>
-	<div class="w3-container">
+
+	<div class="w3-container ">
 		<h2>Query your MongoDB online. </h2>
-		<p>We are opensource: <a  target="_blank" href="https://github.com/pcherkasova/mongo-explorer">host inhouse, request new features and contribute.</a></p>
+		<p>We are opensource:
+			<a target="_blank" href="https://github.com/pcherkasova/mongo-explorer">host inhouse, request new features and contribute.</a>
+		</p>
 	</div>
-	
+
 	<div ng-controller="MainCtrl as main">
 		<my-connect shared="main.shared"></my-connect>
-        <div ng-controller="TabCtrl as tab" ng-show='main.shared.db.inventory'>
-            <ul class="w3-navbar w3-light-grey w3-center">
-				<li class='w3-half' ><a href="#" ng-click="tab.select(0)" ng-class="{'w3-theme': tab.isSelected(0)}">Queries</a></li>
-				<li class= 'w3-half' ><a href="#" ng-click="tab.select(1)" ng-class="{'w3-theme': tab.isSelected(1)}">Dashboards</a></li>
+
+		<br>
+		<div ng-controller="TabCtrl as tab" ng-show='main.shared.db.inventory'>
+			<ul class="w3-navbar w3-light-grey w3-center w3-text-theme">
+				<li class='w3-half'>
+					<a href="#" ng-click="tab.select(0)" ng-class="{'w3-theme': tab.isSelected(0)}">Queries</a>
+				</li>
+				<li class='w3-half'>
+					<a href="#" ng-click="tab.select(1)" ng-class="{'w3-theme': tab.isSelected(1)}">Dashboards</a>
+				</li>
 			</ul>
 			<div ng-show="tab.isSelected(0)">
 				<br>
 				<my-queries shared="main.shared"></my-queries>
+
 			</div>
 			<div ng-show="tab.isSelected(1)">
-				Dashboards
+				<br> Dashboards will come soon.
 			</div>
-
 		</div>
-
-
-
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-{{main.shared}}
 	</div>
+    <br>
+    <footer class="w3-container w3-theme">
+		<div class="w3-row-padding">
+			<div class="w3-col w3-third">
+				<div class="w3-topnav" ng-controller="PrivacyPolicyCtrl as privacy">
+					<a class="w3-theme" ng-click="privacy.open('lg')" href="">Privacy Policy</a>
+					<a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer">GitHub</a>
+				</div>
+			</div>
+			<div class="w3-col w3-twothird w3-border-left w3-container">
+				<p>Thank you for using Mongo-Explorer! Your <a class="w3-theme" target="_blank" href="https://github.com/pcherkasova/mongo-explorer/issues">feedback and contributions</a> are very welcome. </p>
+			</div>
+		</div>
+	</footer>
 
-
-				
-	
-
-	
-
+   <my-privacy shared="main.shared"></my-privacy>
 </body>
+
 </html>

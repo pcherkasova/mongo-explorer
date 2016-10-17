@@ -12,50 +12,6 @@ var logging   = require('./../../app/core/logging.core.js');
 var hashing   = require('./../../app/framework/hashing.fw.js');
 var dbOperations   = require('./../../app/framework/db_operations.fw.js');
 
-
-// Returns HTTP result.
-exports.runQueryHTTP = function (req, res, next) {
-    var start = new Date().getTime();
-
-    var input = req.query;
-    var output = { err: null, res: null };
-    var q;
-    
-    Q.try(function () {
-        try {
-            q = JSON.parse(input.q);
-        } catch (err) {
-            throw new errors.AppError(errors.ERR.MONGO.QUERY_FORMAT);
-        }
-    }).then(function () {
-        return runQuery(input.conn, input.coll, input.operation, q, constants.ROW_LIMIT);
-    }).then(function (arr) {
-        output.res = arr;   
-    }).catch(function (err) {
-        output.err = exports.processMongoError(err, req.session.id);
-        if (output.err.code == errors.ERR.MONGO.UNEXPECTED) 
-            throw err;
-    }).finally(function () {
-        input.conn = hashConnString(input.conn);  // we do not want to store connection string
-        var example = -1;
-        for (var i in constants.queryExamples)
-            if (constants.queryExamples[i].query === input.q)
-                {
-                    example = i;
-                    break;
-                }
-        logging.logTrace(req.session, "run-query", 
-            { 
-                duration: new Date().getTime() - start, 
-                input: input, 
-                res: output.res? output.res.
-                length: undefined, 
-                err: output.err,
-                example:  example});
-        res.json(output);
-    }).done();
-}
-
 exports.processMongoError = function (err, session) {
     var res = new errors.AppError(errors.ERR.MONGO.UNEXPECTED);
     if (err instanceof errors.AppError){
@@ -100,10 +56,6 @@ var getCollections = function(connectionString) {
             res.push({ name: colls[i].name, count: values[i] })
         }
         return res;
-    }).catch(function (err) {    
-        output.err = exports.processMongoError(err, req.session.id);
-        if (output.err.code == errors.ERR.MONGO.UNEXPECTED) 
-            throw err;
     }).finally(function () {
         if (db) db.close();
     });    
@@ -111,6 +63,7 @@ var getCollections = function(connectionString) {
 
 // Returns promise with array.
 var runQuery = function(connectionString, collName, operation, query, rowLimit) {
+    
     var db;
     return Q.try(function () { 
         if (!collName) {
@@ -131,7 +84,8 @@ var runQuery = function(connectionString, collName, operation, query, rowLimit) 
                 if (!query.query) query.query = {};
                 if (!query.projection) ;
                 if (!query.sort) query.sort = {};
-                cursor = collection.find(query.query, query.projection).sort(query.sort).limit(rowLimit);
+                if (!query.limit) query.limit = rowLimit;
+                cursor = collection.find(query.query, query.projection).sort(query.sort).limit(query.limit);
                 break;
             case "aggr":
                 cursor = collection.aggregate(query).limit(rowLimit);
@@ -142,6 +96,42 @@ var runQuery = function(connectionString, collName, operation, query, rowLimit) 
     }).finally(function () {
         if (db) db.close();
     });
+}
+
+// Resolves HTTP result.
+exports.runQueryHTTP = function (req, res, next) {
+    var start = new Date().getTime();
+
+    var input = req.query;
+    var output = { err: null, res: null };
+    var q;
+    
+    Q.try(function () {
+        try {
+            q = JSON.parse(input.q);
+        } catch (err) {
+            throw new errors.AppError(errors.ERR.MONGO.QUERY_FORMAT);
+        }
+    }).then(function () {
+        return runQuery(input.conn, input.coll, input.operation, q, constants.ROW_LIMIT);
+    }).then(function (arr) {
+        output.res = arr;  
+    }).catch(function (err) {
+        output.err = exports.processMongoError(err, req.session.id);
+        if (output.err.code == errors.ERR.MONGO.UNEXPECTED) 
+            throw err;
+    }).finally(function () {
+        input.conn = hashConnString(input.conn);  // we do not want to store connection string
+        logging.logTrace(req.session, "run-query", 
+            { 
+                duration: new Date().getTime() - start, 
+                input: input, 
+                res: output.res? output.res.
+                length: undefined, 
+                err: output.err});
+
+        res.json(output);
+    }).done();
 }
 
 var hashConnString = function(connString){
@@ -192,14 +182,11 @@ exports.saveQueriesHTTP = function (req, res, next) {
     return dbOperations.clearAndInsertMany(input.conn, 'mongo-explorer.com', queries)
     .then(function (res) {
         output.res = res.result.ok ? true : false;
-        console.log('res:' + JSON.stringify(res, null, 4));
     }).catch(function (err) {   
-        console.log(err); 
         output.err = exports.processMongoError(err, req.session.id);
         if (output.err.code == errors.ERR.MONGO.UNEXPECTED) 
             throw err;
     }).finally(function () {
-        console.log('output:' + JSON.stringify(output, null, 4));
         input.conn = hashConnString(input.conn); // We do not store plain connection string.
         logging.logTrace(req.session, "connect", { duration: new Date().getTime() - start, input: input, res: output.res? output.res.length : undefined, err: output.err });
         res.json(output);

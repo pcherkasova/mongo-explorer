@@ -1,43 +1,37 @@
-<div >
-	<div class="w3-card-2">
-		<div class="w3-container w3-theme ">
-			Your connection string:
-			<div class="w3-right w3-text-white w3-small">
-				<a href='#' ng-click="$ctrl.setMy()">My</a>&nbsp;
-				<a href='#' ng-click="$ctrl.setDemo()">Demo</a>&nbsp;
-				<a href="https://mlab.com/" target="_blank">New</a>
-			</div>
-		</div>
-		<div class="w3-container w3-theme-light">
-            <table style="width:100%">
-                <tr>
-                    <td style="width:100%">
-                        <input ng-model="$ctrl.shared.db.connectionString" style="width:100%;margin-top: 6px; margin-bottom:6px" class="w3-code w3-small" placeholder="connection string"/>
-                    </td>
-                    <td>
-                        <a class="w3-btn w3-theme"  ng-click="$ctrl.connect()">Connect</a>
-                    </td>
-                </tr>
-            <table>
-            
-            <div class="w3-left w3-tiny w3-text-red">
-                <span ng-show="$ctrl.progress" class="w3-text-theme">
-                    <i class="fa fa-refresh fa-spin"></i>
-                </span>
-                <span ng-show="$ctrl.shared.db.inventory" class="w3-text-theme">Connected</span>
-                <span ng-show="$ctrl.error == $ctrl.ERR.MONGO.CONN_EMPTY">Please, enter connection string.</span>
-                <span ng-show="$ctrl.error == $ctrl.ERR.MONGO.CONN_FORMAT">Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]".</span>
-                <span ng-show="$ctrl.error == $ctrl.ERR.MONGO.CONN_TIMED_OUT">The request to the server timed out.</span>
-                <span ng-show="$ctrl.error == $ctrl.ERR.MONGO.CONN_AUTH">Authentication failed.</span>
-                <span ng-show="$ctrl.error == $ctrl.ERR.MONGO.CONN_NO_SERVER">Could not connect to the server.</span>
-             </div> 
-             <div class="w3-right w3-tiny" >
-                
-                    <input ng-model="$ctrl.remember" type="checkbox">
-                    <label class="w3-text-theme w3">Remember as My</label>
-               
-             </div>
-            
-		</div>
-	</div>
+<div class="w3-container w3-card-2 w3-border-top w3-theme-light w3-text-theme ">
+    <br>
+    Your connection string:
+    <div class="w3-right w3-small">
+        <a href='#' ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" ng-click="$ctrl.setMy()">My</a>&nbsp;
+        <a href='#' ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" ng-click="$ctrl.setDemo()">Demo</a>&nbsp;
+        <a href="https://mlab.com/" ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" target="_blank">New</a>
+    </div>
+    <br>
+    <table style="width:100%">
+        <tr>
+            <td style="width:100%">
+                <input ng-model="$ctrl.shared.db.connectionString" 
+                       style="width:100%;height:30px" 
+                       ng-class="{'w3-disabled': $ctrl.shared.isProgress()}"
+                       class="w3-text-black w3-small" placeholder="connection string"/>
+            </td>
+            <td>
+                <a class="w3-btn w3-theme w3-small" ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" ng-click="$ctrl.connect()" style="height:30px">Connect</a>
+            </td>
+        </tr>
+    <table>
+    
+    <div class="w3-left w3-tiny w3-text-red">
+        <span ng-show="$ctrl.shared.connectProgress" class="w3-text-theme">
+            <i class="fa fa-refresh fa-spin"></i>
+        </span>
+        <span ng-show="$ctrl.shared.db.inventory" class="w3-text-theme">Connected </span>
+        <span>{{$ctrl.error}}</span>
+    </div> 
+    <div class="w3-right w3-tiny" >
+        <input ng-model="$ctrl.remember" type="checkbox">
+        <label class="w3-text-theme w3">Remember as My</label>
+    </div>
+    <br>
+    <br>
 </div>

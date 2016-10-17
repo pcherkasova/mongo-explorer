@@ -21,7 +21,7 @@ exports.AppError.prototype.toString = function() {
 		}
 		
 	if (this.details) {
-		res += "." + this.details;
+		res += ". " + this.details;
 	}
 	
 	return res;

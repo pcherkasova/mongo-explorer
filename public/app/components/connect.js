@@ -6,60 +6,78 @@
     function controller($scope, $http) {
         this.ERR = window.$errors.ERR;
    
-        this.myDB = this.shared.cookies.get('myDB');
+        this.myDB = this.shared.$cookies.get('myDB');
         if (!this.myDB) this.myDB = '';
+
+        this.setError = function(code, details) {
+            switch(code) {
+                case this.ERR.MONGO.CONN_EMPTY: this.error = 'Please, enter connection string. '; break;
+                case this.ERR.MONGO.CONN_FORMAT: this.error = 'Connection string should have format: "mongodb://[username:password@]host1[:port1][,host2[:port2],...[,hostN[:portN]]][/[database][?options]]". '; break;
+                case this.ERR.MONGO.CONN_TIMED_OUT: this.error = 'The request to the server timed out. '; break;
+                case this.ERR.MONGO.CONN_AUTH: this.error = 'Authentication failed. '; break;
+                case this.ERR.MONGO.CONN_NO_SERVER: this.error = 'Could not connect to the server. '; break;
+                default: this.error = 'Error: ' + code + '. ';
+            }
+            if (details) this.error += details;
+         }
   
         this.connect = function() {
             if (this.remember) {
-                this.shared.cookies.put('myDB', this.shared.db.connectionString);
+                this.shared.$cookies.put('myDB', this.shared.db.connectionString);
                 this.myDB = this.shared.db.connectionString;
             }
             var scope = this;
-            scope.progress = true;
+            scope.shared.connectProgress = true;
 			scope.shared.db.inventory = null;
-            scope.error = 0;
+            scope.shared.db.modified = false;
+            scope.error = '';
             
             $http({url: "../api/connect", method: "GET", params: { conn: scope.shared.db.connectionString }})
             .then(
 				function (response) {
-                    scope.progress = false;
+                    scope.shared.connectProgress = false;
 
 					if (response.data.res) {
                         scope.shared.db.inventory = response.data.res;
-                        scope.shared.selectedQuery = 0;
+                        scope.shared.selectQuery(0);
 					} else if (response.data.err) { 
-						scope.error = response.data.err.code;
-						scope.errorDetails = response.data.err.details;
+						scope.setError(response.data.err.code, response.data.err.details);
                     } else {
-                        scope.error = window.$errors.ERR.CLIENT_UNEXPECTED;
+                        scope.setError(window.$errors.ERR.CLIENT_UNEXPECTED);
                     };
 				}, 
 				function (err) {
-                    scope.error = window.$errors.ERR.SERVER_UNEXPECTED;
-					scope.progress = false;
+                    alert(JSON.stringify(err));
+                    scope.setError(window.$errors.ERR.SERVER_UNEXPECTED, err.data);
+					scope.shared.connectProgress = false;
 				}
 			);
         };
 
         this.setMy = function() {
-            this.setConnectionString(this.myDB);
             this.remember = true;
+            this.setConnectionString(this.myDB);
+            
         }
 
         this.setDemo = function() {
-            this.setConnectionString(this.shared.demoDB);
             this.remember = false;
+            this.setConnectionString(this.shared.demoDB);
         }
 
         this.setConnectionString = function(val) {
             if (this.shared.db.connectionString == val) return;
             this.shared.db.connectionString = val;
             this.shared.db.inventory = null;
+            if (val) this.connect();
         }
         
         this.shared.db = {};
         this.shared.db.connectionString = this.shared.demoDB;
-        this.connect();
+
+        if (this.myDB) this.setMy()
+        else this.setDemo();
+        
     }
 
     app.component('myConnect', {
