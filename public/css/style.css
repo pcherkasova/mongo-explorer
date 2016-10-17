@@ -11,3 +11,11 @@ label {
 .ace_editor { 
 	height: 200px; 
 }
+
+.pointer {
+	cursor:pointer;
+}
+
+a.grey-hover:hover {
+	background-color:#ccc;
+}

@@ -1,9 +1,13 @@
-<div class=' w3-card-2 w3-border' ng-show="$ctrl.shared.db.selectedQuery">
-	<div class="w3-border-bottom w3-row-padding w3-padding-12 w3-theme-light w3-text-theme w3-small">
+<div class=' w3-card-4 ' ng-show="$ctrl.shared.db.selectedQuery">
+	<div class=" w3-row-padding w3-padding-12 w3-light-grey w3-text-theme w3-small">
 		<div class='w3-col w3-quarter'>
 			<label class='w3-tiny'>Query name</label>
-			<input class="w3-text-black" ng-model="$ctrl.shared.db.selectedQuery.name" type="text" style="width: 100%;height: 25px" ng-class="{'w3-disabled': $ctrl.shared.isProgress()}"
-				ng-change="$ctrl.shared.db.modified = true">
+			<input class="w3-text-black" 
+               ng-model="$ctrl.shared.db.selectedQuery.name" 
+               type="text" style="width: 100%;height: 25px" 
+               ng-class="{'w3-disabled': $ctrl.shared.isProgress()}"
+				ng-change="$ctrl.shared.db.modified = true;"
+                ng-blur="$ctrl.shared.sortQueries();">
 		</div>
 		<div class='w3-col w3-quarter'>
 			<label class='w3-tiny'>Collection</label>
@@ -35,10 +39,10 @@
         aceEditor.setHighlightActiveLine(false);
         aceEditor.$blockScrolling = Infinity;
     </script>
-    <div class='w3-container w3-tiny w3-theme-light '>
+    <div class='w3-container w3-tiny w3-light-grey '>
         <span class='w3-text-red'>{{$ctrl.error}}</span>
     </div>
-	<div class="w3-border-bottom w3-row-padding w3-padding-12 w3-theme-light w3-text-theme w3-small">
+	<div class="w3-border-bottom w3-row-padding w3-padding-12 w3-light-grey w3-text-theme w3-small">
 		<div class='w3-col w3-quarter'>
 			&nbsp;
 		</div>

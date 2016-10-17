@@ -12,7 +12,7 @@
             this.shared.selectQuery(Math.min(this.shared.db.inventory.queries.length - 1, this.shared.db.selectedQueryIndex));
             this.shared.db.modified = true;
         };
-
+        
         this.addQuery = function() {
             this.shared.db.inventory.queries.push(
                 {
@@ -24,6 +24,7 @@
             );
             this.shared.selectQuery(Math.max(0, this.shared.db.selectedQueryIndex));
             this.shared.db.modified = true;
+            this.shared.sortQueries();
         };
 
         this.save = function() {
@@ -67,6 +68,7 @@
 			);
         }
 
+        
     }
 
     app.component('myQueries', {

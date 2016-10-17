@@ -1,23 +1,30 @@
 <div class='w3-row-padding'>
     <div class='w3-col w3-quarter'>
-        <ul class="w3-ul w3-card-4 w3-hoverable">
-            <li 
+        <div class="w3-card-4 w3-navbar">
+            <div 
+                class='w3-row-padding w3-padding-4 w3-container pointer w3-border-bottom'
                 ng-repeat="query in $ctrl.shared.db.inventory.queries | orderBy: query.name"
-                ng-class="{'w3-theme': $index == $ctrl.shared.db.selectedQueryIndex}"]
-                ng-click="$ctrl.shared.selectQuery($index)" 
-                >
-                {{query.name}}
-                <span 
+                ng-class="$index == $ctrl.shared.db.selectedQueryIndex ? 'w3-theme w3-text-white' : 'w3-white w3-text-theme grey-hover'"
+                ng-click="$ctrl.shared.selectQuery($index)">
+
+                <div 
                     ng-click="$ctrl.deleteQuery($index)" 
-                    class="w3-closebtn w3-margin-right w3-medium"
+                    class="w3-col w3-right"
+                    style="width:16px"
                     ng-class="{'w3-disabled': $ctrl.shared.isProgress()}"
                     >
                     &times;
-                </span>
-            </li>
-        </ul>
+                    
+                </div>
+                <div class='w3-rest'>
+                    {{query.name}}
+                </div>
+            </div>
+        </div>
         <br>
-        <a class="w3-btn w3-theme w3-card-4" ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" ng-click="$ctrl.addQuery()" style="width:100%">+</a>
+        <a class="w3-btn w3-theme w3-card-4 grey-hover" ng-class="{'w3-disabled': $ctrl.shared.isProgress()}" ng-click="$ctrl.addQuery()" style="width:100%">
+            &#9547;        
+        </a>
         <br>        
         <br>
         <a class="w3-btn w3-theme w3-card-4"  ng-show='$ctrl.shared.db.modified' ng-click="$ctrl.save()" style="width:100%">

@@ -19,7 +19,7 @@
                 default: this.error = 'Error: ' + code + '. ';
             }
             if (details) this.error += details;
-         }
+        }
   
         this.connect = function() {
             if (this.remember) {
@@ -39,6 +39,8 @@
 
 					if (response.data.res) {
                         scope.shared.db.inventory = response.data.res;
+
+                        scope.shared.sortQueries();
                         scope.shared.selectQuery(0);
 					} else if (response.data.err) { 
 						scope.setError(response.data.err.code, response.data.err.details);
@@ -76,7 +78,7 @@
         
         if (this.myDB) this.setMy()
         else this.setDemo();
-        
+
     }
 
     app.component('myConnect', {

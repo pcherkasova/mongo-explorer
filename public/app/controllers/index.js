@@ -19,7 +19,14 @@
                 this.db.selectedQueryIndex = index;
                 this.db.selectedQuery = this.db.inventory.queries[index];
             },
-            
+
+            sortQueries: function () {
+                this.db.inventory.queries = this.db.inventory.queries.sort(function(a, b){
+                        return a.name > b.name;
+                });
+                this.db.selectedQueryIndex = this.db.inventory.queries.indexOf(this.db.selectedQuery);
+            },
+
             isProgress: function() {
                 return (this.connectProgress || this.saveProgress || this.runProgress);
             },
