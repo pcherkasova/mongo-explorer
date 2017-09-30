@@ -6,11 +6,11 @@ The explorer is hosted here: www.mongo-explorer.com.
 The user inrterface is designed to be self-descriptive. If it is not, please, create an [issue](https://github.com/pcherkasova/mongo-explorer/issues).
 
 
-#Technologies
+# Technologies
 Mongo-exploprer stays on [nodejs](https://nodejs.org/en/), [mongodb](https://www.mongodb.com/) and [angularjs](https://angularjs.org/). 
 
 
-#How to Host
+# How to Host
 1. Install nodejs and npm
 2. Set environment variables:
 
@@ -25,7 +25,7 @@ Mongo-exploprer stays on [nodejs](https://nodejs.org/en/), [mongodb](https://www
   node server.js
 
 
-#How to Run Tests
+# How to Run Tests
 1. Set environment variables like for hosting plus:
 
   APP_TEST_DB - connection string to a Mongo DB, with write permissions
